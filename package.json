@@ -45,6 +45,7 @@
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-jss": "^8.6.0",
+    "react-modal": "^3.6.1",
     "react-stripe-checkout": "^2.6.3",
     "request": "^2.87.0",
     "winston": "^3.0.0"

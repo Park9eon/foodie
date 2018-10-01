@@ -19,7 +19,7 @@ const ROOT_URL = dev ? `http://localhost:${port}` : `${process.env.PROD_URL}`;
 
 const MONGO_URL = dev ? process.env.MONGO_URL_TEST : process.env.MONGO_URL;
 
-mongoose.connect(MONGO_URL, { useNewUrlParser: true });
+mongoose.connect(MONGO_URL,  { useNewUrlParser: true });
 
 const sessionSecret = process.env.SESSION_SECRET;
 

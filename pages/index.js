@@ -1,20 +1,37 @@
-import PropTypes from 'prop-types';
+import React from 'react';
 import withAuth from '../lib/withAuth';
 
-const Index = ({ user }) => (
-  <div>
-    {user ? user.displayName : ''}
-  </div>
-);
+class Index extends React.Component {
+  constructor() {
+    super();
 
-Index.propTypes = {
-  user: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-  }),
-};
+    this.eateryList = [];
+  }
 
-Index.defaultProps = {
-  user: null,
-};
+  componentDidMount() {
+    this.eateryList = [];
+  }
+
+  render() {
+    return (
+      <div>
+        <section className="eatery-list">
+          <ul>
+            {this.eateryList.map(eatery => (
+              <li>
+                <div>
+                  {eatery.name}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section className="eatery-map">
+          NONE
+        </section>
+      </div>
+    );
+  }
+}
 
 export default withAuth(Index, { loginRequired: true });

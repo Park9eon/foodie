@@ -1,6 +1,5 @@
 /* eslint-disable react/no-danger */
 import React from 'react';
-import JssProvider from 'react-jss/lib/JssProvider';
 import Document, { Head, Main, NextScript } from 'next/document';
 import htmlescape from 'htmlescape';
 
