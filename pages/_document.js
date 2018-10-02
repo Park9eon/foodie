@@ -1,7 +1,9 @@
 /* eslint-disable react/no-danger */
 import React from 'react';
+import JssProvider from 'react-jss/lib/JssProvider';
 import Document, { Head, Main, NextScript } from 'next/document';
 import htmlescape from 'htmlescape';
+import getContext from '../lib/getContext';
 
 const { GA_TRACKING_ID, StripePublishableKey } = process.env;
 const env = {
@@ -79,5 +81,28 @@ class MyDocument extends Document {
     );
   }
 }
+
+MyDocument.getInitialProps = (ctx) => {
+  const pageContext = getContext();
+  const page = ctx.renderPage(Component => props => (
+    <JssProvider
+      registry={pageContext.sheetsRegistry}
+      generateClassName={pageContext.generateClassName}
+    >
+      <Component pageContext={pageContext} {...props} />
+    </JssProvider>
+  ));
+
+  return {
+    ...page,
+    pageContext,
+    styles: (
+      <style
+        id="jss-server-side"
+        dangerouslySetInnerHTML={{ __html: pageContext.sheetsRegistry.toString() }}
+      />
+    ),
+  };
+};
 
 export default MyDocument;
