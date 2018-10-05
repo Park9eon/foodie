@@ -33,36 +33,36 @@ class Index extends React.Component {
 
   render() {
     return (
-      <div>
-        <Grid container
-              spacing={2}>
-          <Grid item
-                xs={3}>
-            <Paper>
-              {/* 음식점 목록 */}
-              <section className="eatery-list">
-                <ul>
-                  {this.eateryList.map(eatery => (
-                    <li>
+      <Grid container spacing={16}>
+        <Grid item xs={12}>
+          <Grid container
+                spacing={16}>
+            <Grid item
+                  xs={3}>
+              <Paper>
+                {/* 음식점 목록 */}
+                <section className="eatery-list">
+                  <div>
+                    {this.eateryList.map(eatery => (
                       <div>
                         {eatery.name}
                       </div>
-                    </li>
-                  ))}
-                </ul>
-                <Button color="primary"
-                        onClick={this.onEditDialogOpen}>음식점 추가</Button>
-              </section>
-            </Paper>
-          </Grid>
-          <Grid item
-                xs={9}>
-            <Paper>
-              {/* 지도 부분 */}
-              <section className="eatery-map">
-                지도입니다.
-              </section>
-            </Paper>
+                    ))}
+                  </div>
+                  <Button color="primary"
+                          onClick={this.onEditDialogOpen}>음식점 추가</Button>
+                </section>
+              </Paper>
+            </Grid>
+            <Grid item
+                  xs={9}>
+              <Paper>
+                {/* 지도 부분 */}
+                <section className="eatery-map">
+                  지도입니다.
+                </section>
+              </Paper>
+            </Grid>
           </Grid>
         </Grid>
         {/* 추가 및 수정 dialog */}
@@ -71,7 +71,7 @@ class Index extends React.Component {
           open={this.state.isEditDialogOpen}
         />
         {/* 자세히보기 dialog */}
-      </div>
+      </Grid>
     );
   }
 }
