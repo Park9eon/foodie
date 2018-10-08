@@ -13,6 +13,8 @@ import Chip from '@material-ui/core/Chip';
 import CloseIcon from '@material-ui/icons/Close';
 import ImgDialog from './imgDialog';
 
+import { createEatery } from '../lib/api/eatery';
+
 class EditDialog extends React.Component {
   static propTypes = {
     open: PropTypes.bool.isRequired,
@@ -28,12 +30,16 @@ class EditDialog extends React.Component {
     this.onImgDialogClose = this.onImgDialogClose.bind(this);
     this.onImgDialogOpen = this.onImgDialogOpen.bind(this);
 
+    this.addTag = this.addTag.bind(this);
     this.removeTag = this.removeTag.bind(this);
     this.removeImage = this.removeImage.bind(this);
+
+    this.save = this.save.bind(this);
   }
 
   state = {
     name: '',
+    nameError: false,
     tag: '',
     description: '',
     tags: [],
@@ -99,6 +105,16 @@ class EditDialog extends React.Component {
     }
   }
 
+  addTag() {
+    if (this.state.tag) {
+      this.state.tags.push(this.state.tag);
+      this.setState({
+        tags: this.state.tags,
+        tag: '',
+      });
+    }
+  }
+
   removeTag(index) {
     this.state.tags.splice(index, 1);
     this.setState({ tags: this.state.tags });
@@ -107,6 +123,45 @@ class EditDialog extends React.Component {
   removeImage(index) {
     this.state.images.splice(index, 1);
     this.setState({ images: this.state.images });
+  }
+
+  save(callback) {
+    if (!this.state.name) {
+      return this.setState({ nameError: true });
+    }
+    const data = new FormData();
+    data.append('name', this.state.name);
+    if (this.state.description) {
+      data.append('description', this.state.description);
+    }
+    if (this.state.tags.length > 0) {
+      this.state.tags.forEach((tag) => {
+        data.append('tags', tag);
+      });
+    }
+    if (this.state.images.length > 0) {
+      this.state.images.forEach((image) => {
+        if (typeof image === 'string') {
+          if (image.indexOf('base64') > 0) {
+            const byteString = atob(image.split(',')[1]);
+            const mimeString = image.split(',')[0].split(':')[1].split(';')[0];
+            const ia = new Uint8Array(byteString.length);
+            for (let i = 0; i < byteString.length; i++) {
+              ia[i] = byteString.charCodeAt(i);
+            }
+            data.append('images', new Blob([ia], { type: mimeString }));
+          } else {
+            data.append('imageUrls', image);
+          }
+        } else {
+          data.append('images', image);
+        }
+      });
+    }
+    createEatery(data)
+      .then((res) => {
+        console.log(res);
+      });
   }
 
   render() {
@@ -124,6 +179,7 @@ class EditDialog extends React.Component {
             <TextField
               id="name"
               label="이름"
+              error={this.state.nameError}
               value={this.state.name}
               onChange={this.handleChange('name')}
               margin="normal"
@@ -145,6 +201,7 @@ class EditDialog extends React.Component {
               onKeyPress={this.handleKeyPress}
               value={this.state.tag}
               onChange={this.handleChange('tag')}
+              inputProps={{ onBlur: this.addTag }}
               margin="normal"
               fullWidth
             />
@@ -157,47 +214,57 @@ class EditDialog extends React.Component {
               />
             ))}
             <div>
-              <GridList cellHeight={100}
-                        cols={4}
-                        style={{
-                          marginTop: '16px',
-                        }}>
+              <GridList
+                cellHeight={100}
+                cols={4}
+                style={{
+                  marginTop: '16px',
+                }}
+              >
                 {this.state.images.map((image, index) => (
-                  <GridListTile key={index}
-                                cols={1}>
+                  <GridListTile
+                    key={index}
+                    cols={1}
+                  >
                     <div style={{
                       position: 'relative',
                       height: '100%',
-                    }}>
-                      <img src={typeof image === 'string' ? image : image.preview}
-                           style={{
-                             width: '100%',
-                             height: '100%',
-                             objectFit: 'cover',
-                           }}
+                    }}
+                    >
+                      <img
+                        src={typeof image === 'string' ? image : image.preview}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                        }}
                       />
-                      <IconButton onClick={() => this.removeImage(index)}
-                                  style={{
-                                    color: '#eee',
-                                    background: 'rgba(0, 0, 0, .8)',
-                                    position: 'absolute',
-                                    top: '50%',
-                                    left: '50%',
-                                    transform: 'translate(-50%, -50%)',
-                                  }}>
-                        <CloseIcon fontSize="small"/>
+                      <IconButton
+                        onClick={() => this.removeImage(index)}
+                        style={{
+                          color: '#eee',
+                          background: 'rgba(0, 0, 0, .8)',
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                        }}
+                      >
+                        <CloseIcon fontSize="small" />
                       </IconButton>
                     </div>
                   </GridListTile>
                 ))}
                 <GridListTile>
-                  <Button color="primary"
-                          variant="outlined"
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                          }}
-                          onClick={this.onImgDialogOpen}>
+                  <Button
+                    color="primary"
+                    variant="outlined"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                    }}
+                    onClick={this.onImgDialogOpen}
+                  >
                     이미지 추가
                   </Button>
                 </GridListTile>
@@ -213,7 +280,7 @@ class EditDialog extends React.Component {
             취소
           </Button>
           <Button
-            onClick={this.props.onClose}
+            onClick={() => this.save(this.props.onClose)}
             color="primary"
           >
             저장

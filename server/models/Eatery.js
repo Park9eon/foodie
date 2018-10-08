@@ -49,10 +49,11 @@ class EateryClass {
     name,
     address,
     location,
+    photos,
     tags,
   }) {
     const result = await this.create({
-      name, address, location, tags,
+      name, address, location, tags, photos,
     });
     return result;
   }

@@ -1,5 +1,30 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const File = require('../models/File');
 const Eatery = require('../models/Eatery');
+
+const upload = multer({
+  dest: 'public/upload',
+  limit: {
+    fieldNameSize: 300, // 200Byte
+    fieldSize: 5e+6, // 3MB
+  },
+  storage: multer.diskStorage({
+    destination(req, file, callback) {
+      callback(null, 'static/upload');
+    },
+    filename(req, file, callback) {
+      File.create({
+        mimetype: file.mimetype || 'image/jpeg',
+        filename: file.originalname,
+        extName: path.extname(file.originalname) || '.jpg',
+      }, (err, $file) => {
+        callback(null, $file._id.toString() + $file.extName);
+      });
+    },
+  }),
+});
 
 const router = express.Router();
 
@@ -22,6 +47,9 @@ function authorization({ isAdminOnly = false } = {}) {
 }
 
 function api(server) {
+  const port = process.env.PORT || 8000;
+  const dev = process.env.NODE_ENV !== 'production';
+  const ROOT_URL = dev ? `http://localhost:${port}` : `${process.env.PROD_URL}`;
   // 음식점 목록
   router.get('/', async (req, res) => {
     try {
@@ -50,9 +78,19 @@ function api(server) {
     }
   });
   // 음식점 등록
-  router.post('/', authorization(), async (req, res) => {
+  router.post('/', authorization(), upload.array('images', 12), async (req, res) => {
     try {
-      const result = await Eatery.add(req.body);
+      const {
+        name, description, tags, imageUrls,
+      } = req.body;
+      const photos = req.files.map(file => path.join(ROOT_URL, 'static', 'upload', file.filename))
+        .concat(imageUrls || []);
+      const result = await Eatery.add({
+        name,
+        description,
+        tags,
+        photos,
+      });
       res.json(result);
     } catch (err) {
       res.json({ error: err.message || err.toString() });
@@ -77,7 +115,7 @@ function api(server) {
     }
   });
 
-  server.use('/api', router);
+  server.use('/api/eatery', router);
 }
 
 module.exports = api;

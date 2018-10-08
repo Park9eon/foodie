@@ -3,6 +3,7 @@ const session = require('express-session');
 const compression = require('compression');
 const mongoSessionStore = require('connect-mongo');
 const next = require('next');
+const path = require('path');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const auth = require('./google');
@@ -19,7 +20,7 @@ const ROOT_URL = dev ? `http://localhost:${port}` : `${process.env.PROD_URL}`;
 
 const MONGO_URL = dev ? process.env.MONGO_URL_TEST : process.env.MONGO_URL;
 
-mongoose.connect(MONGO_URL,  { useNewUrlParser: true });
+mongoose.connect(MONGO_URL, { useNewUrlParser: true });
 
 const sessionSecret = process.env.SESSION_SECRET;
 
@@ -39,6 +40,10 @@ app.prepare()
     });
 
     server.get('/static/*', (req, res) => {
+      handle(req, res);
+    });
+
+    server.get('/public/*', (req, res) => {
       handle(req, res);
     });
 
