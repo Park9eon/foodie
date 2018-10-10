@@ -53,7 +53,7 @@ function api(server) {
   // 음식점 목록
   router.get('/', async (req, res) => {
     try {
-      const results = Eatery.list();
+      const results = await Eatery.list();
       res.json(results);
     } catch (err) {
       res.json({ error: err.message || err.toString() });

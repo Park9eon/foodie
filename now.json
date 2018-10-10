@@ -2,7 +2,8 @@
   "env": {
     "NODE_ENV": "production",
     "GA_TRACKING_ID": "xxxxxx",
-    "StripePublishableKey": "xxxxxx"
+    "StripePublishableKey": "xxxxxx",
+    "GOOGLE_MAP_KEY": ""
   },
   "alias": "mydomain.com",
   "scale": {

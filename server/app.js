@@ -43,10 +43,6 @@ app.prepare()
       handle(req, res);
     });
 
-    server.get('/public/*', (req, res) => {
-      handle(req, res);
-    });
-
     const MongoStore = mongoSessionStore(session);
     const sess = {
       name: 'foodie.sid',
