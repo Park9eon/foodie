@@ -62,7 +62,6 @@ class MyDocument extends Document {
         />
         <script
           async
-          defer
           src={`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAP_KEY}`}/>
         <script
           dangerouslySetInnerHTML={{

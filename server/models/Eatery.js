@@ -18,6 +18,10 @@ const EaterySchema = new Schema({
     lat: Number, // 위도
   },
   tags: [String],
+  reviews: [{
+    rating: Number,
+    review: String,
+  }],
   photos: [String],
 });
 

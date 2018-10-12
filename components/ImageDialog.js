@@ -12,7 +12,7 @@ import Search from '@material-ui/icons/Search';
 import Link from '@material-ui/icons/Link';
 import Dropzone from 'react-dropzone';
 
-class ImgDialog extends React.Component {
+class ImageDialog extends React.Component {
   static propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
@@ -248,4 +248,4 @@ class ImgDialog extends React.Component {
   }
 }
 
-export default ImgDialog;
+export default ImageDialog;

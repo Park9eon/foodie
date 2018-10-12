@@ -1,12 +1,7 @@
 import React from 'react';
 import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps';
 
-
-class Map extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
+class GoogleMapWrapper extends React.Component {
   render() {
     return (
       <GoogleMap
@@ -26,4 +21,4 @@ class Map extends React.Component {
   }
 }
 
-export default withGoogleMap(Map);
+export default withGoogleMap(GoogleMapWrapper);

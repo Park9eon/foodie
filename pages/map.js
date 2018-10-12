@@ -5,8 +5,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
-import EditDialog from '../components/editDialog';
-import Map from '../components/map';
+import EditorDialog from '../components/EditorDialog';
+import Map from '../components/GoogleMapWrapper';
 import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
 import { getEateryList } from '../lib/api/eatery';
@@ -41,10 +41,7 @@ class Index extends React.Component {
   render() {
     return (
       <div>
-        <Grid container
-              style={{
-                position: 'relative',
-              }}>
+        <Grid container>
           <Grid item
                 xs={3}>
             {/* 음식점 목록 */}
@@ -74,25 +71,22 @@ class Index extends React.Component {
               left: 0,
               right: 0,
             }}>
-              <Map
-                loadingElement={<div style={{ height: `100%` }}/>}
-                containerElement={<div style={{
-                  height: '100%',
-                }}/>}
-                mapElement={<div style={{ height: '100%' }}/>}/>
+              {/*<Map*/}
+                {/*loadingElement={<div style={{ height: `100%` }}/>}*/}
+                {/*containerElement={<div style={{*/}
+                  {/*height: '100%',*/}
+                {/*}}/>}*/}
+                {/*mapElement={<div style={{ height: '100%' }}/>}/>*/}
             </section>
             <Button color="primary"
                     variant="fab"
                     style={{
-                      position: 'absolute',
-                      bottom: '18px',
-                      left: '18px',
                     }}
                     onClick={this.onEditDialogOpen}><AddIcon/></Button>
           </Grid>
         </Grid>
         {/* 추가 및 수정 dialog */}
-        <EditDialog
+        <EditorDialog
           onClose={this.onEditDialogClose}
           open={this.state.isEditDialogOpen}
         />

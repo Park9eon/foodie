@@ -30,6 +30,11 @@ const styles = theme => ({
       display: 'none',
     },
   },
+  toolbar: {
+    width: '100%',
+    maxWidth: '1024px',
+    margin: '0 auto',
+  },
 });
 
 class Header extends React.Component {
@@ -46,7 +51,7 @@ class Header extends React.Component {
     mobileMoreAnchorEl: null,
   };
 
-  handleProfileMenuOpen = event => {
+  handleProfileMenuOpen = (event) => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
@@ -55,12 +60,16 @@ class Header extends React.Component {
     this.handleMobileMenuClose();
   };
 
-  handleMobileMenuOpen = event => {
+  handleMobileMenuOpen = (event) => {
     this.setState({ mobileMoreAnchorEl: event.currentTarget });
   };
 
   handleMobileMenuClose = () => {
     this.setState({ mobileMoreAnchorEl: null });
+  };
+
+  logout = () => {
+    window.location = '/logout';
   };
 
   render() {
@@ -71,31 +80,41 @@ class Header extends React.Component {
 
     return (
       <div>
-        <AppBar color="primary"
-                position="static">
-          <Toolbar variant="dense">
-            <Typography variant="h6"
-                        color="inherit"
-                        style={{
-                          flexGrow: 1,
-                          fontWeight: 700,
-                        }}>
+        <AppBar
+          color="primary"
+          position="fixed"
+        >
+          <Toolbar variant="dense" className={classes.toolbar}>
+            <Typography
+              variant="h6"
+              color="inherit"
+              style={{
+                flexGrow: 1,
+                fontWeight: 700,
+              }}
+            >
               MediexFoodie
             </Typography>
             <div className={classes.sectionDesktop}>
-              <Button color="inherit"><ListIcon/></Button>
-              <Button color="inherit"><MapIcon/></Button>
-              <Button color="inherit"
-                      aria-owns={isMenuOpen ? 'material-appbar' : null}
-                      aria-haspopup="true"
-                      onClick={this.handleProfileMenuOpen}><AccountIcon className={classes.leftIcon}/>{user.displayName}
+              <Button color="inherit"><ListIcon /></Button>
+              <Button color="inherit"><MapIcon /></Button>
+              <Button
+                color="inherit"
+                aria-owns={isMenuOpen ? 'material-appbar' : null}
+                aria-haspopup="true"
+                onClick={this.handleProfileMenuOpen}
+              >
+                <AccountIcon className={classes.leftIcon} />
+                {user.displayName}
               </Button>
             </div>
             <div className={classes.sectionMobile}>
-              <IconButton aria-haspopup="true"
-                          onClick={this.handleMobileMenuOpen}
-                          color="inherit">
-                <MoreIcon/>
+              <IconButton
+                aria-haspopup="true"
+                onClick={this.handleMobileMenuOpen}
+                color="inherit"
+              >
+                <MoreIcon />
               </IconButton>
             </div>
           </Toolbar>
@@ -104,45 +123,45 @@ class Header extends React.Component {
           anchorEl={anchorEl}
           anchorOrigin={{
             vertical: 'top',
-            horizontal: 'right'
+            horizontal: 'right',
           }}
           transformOrigin={{
             vertical: 'top',
-            horizontal: 'right'
+            horizontal: 'right',
           }}
           open={isMenuOpen}
-          onClose={this.handleMenuClose}>
-          <MenuItem onClick={this.handleClose}
-                    disabled>내정보(준비중)</MenuItem>
-          <MenuItem onClick={this.handleClose}>로그아웃</MenuItem>
+          onClose={this.handleMenuClose}
+        >
+          <MenuItem disabled>내정보(준비중)</MenuItem>
+          <MenuItem onClick={this.logout}>로그아웃</MenuItem>
         </Menu>
         <Menu
           anchorEl={mobileMoreAnchorEl}
           anchorOrigin={{
             vertical: 'top',
-            horizontal: 'right'
+            horizontal: 'right',
           }}
           transformOrigin={{
             vertical: 'top',
-            horizontal: 'right'
+            horizontal: 'right',
           }}
           open={isMobileMenuOpen}
           onClose={this.handleMobileMenuClose}
         >
           <MenuItem>
-            <ListIcon className={classes.leftIcon}/>
+            <ListIcon className={classes.leftIcon} />
             <p>목록</p>
           </MenuItem>
           <MenuItem>
-            <MapIcon className={classes.leftIcon}/>
+            <MapIcon className={classes.leftIcon} />
             <p>지도</p>
           </MenuItem>
           <MenuItem disabled>
-            <AccountIcon className={classes.leftIcon}/>
+            <AccountIcon className={classes.leftIcon} />
             <p>내정보(준비중)</p>
           </MenuItem>
-          <MenuItem>
-            <ExitIcon className={classes.leftIcon}/>
+          <MenuItem onClick={this.logout}>
+            <ExitIcon className={classes.leftIcon} />
             <p>로그아웃</p>
           </MenuItem>
         </Menu>

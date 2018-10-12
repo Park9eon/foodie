@@ -83,7 +83,7 @@ function api(server) {
       const {
         name, description, tags, imageUrls,
       } = req.body;
-      const photos = req.files.map(file => path.join(ROOT_URL, 'static', 'upload', file.filename))
+      const photos = req.files.map(file => path.join('static', 'upload', file.filename))
         .concat(imageUrls || []);
       const result = await Eatery.add({
         name,

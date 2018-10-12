@@ -11,11 +11,12 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Chip from '@material-ui/core/Chip';
 import CloseIcon from '@material-ui/icons/Close';
-import ImgDialog from './imgDialog';
+import ImageDialog from './ImageDialog';
+import Tags from './Tags';
 
 import { createEatery } from '../lib/api/eatery';
 
-class EditDialog extends React.Component {
+class EditorDialog extends React.Component {
   static propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
@@ -205,14 +206,7 @@ class EditDialog extends React.Component {
               margin="normal"
               fullWidth
             />
-            {this.state.tags.map((tag, index) => (
-              <Chip
-                key={index}
-                label={tag}
-                style={{ margin: '2px' }}
-                onDelete={() => this.removeTag(index)}
-              />
-            ))}
+            <Tags onDelete={this.removeTag} tags={this.state.tags}/>
             <div>
               <GridList
                 cellHeight={100}
@@ -286,7 +280,7 @@ class EditDialog extends React.Component {
             저장
           </Button>
         </DialogActions>
-        <ImgDialog
+        <ImageDialog
           onClose={this.onImgDialogClose}
           open={this.state.isImgDialogOpen}
         />
@@ -295,4 +289,4 @@ class EditDialog extends React.Component {
   }
 }
 
-export default EditDialog;
+export default EditorDialog;

@@ -55,7 +55,7 @@ function auth({ ROOT_URL, server }) {
   server.use(passport.initialize());
   server.use(passport.session());
 
-  server.get('/auth/google', (req, res, next) => {
+  server.get('/login', (req, res, next) => {
     const options = {
       scope: ['profile', 'email'],
       prompt: 'select_account',
