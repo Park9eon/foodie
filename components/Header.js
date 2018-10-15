@@ -30,11 +30,6 @@ const styles = theme => ({
       display: 'none',
     },
   },
-  toolbar: {
-    width: '100%',
-    maxWidth: '1024px',
-    margin: '0 auto',
-  },
 });
 
 class Header extends React.Component {
@@ -84,7 +79,7 @@ class Header extends React.Component {
           color="primary"
           position="fixed"
         >
-          <Toolbar variant="dense" className={classes.toolbar}>
+          <Toolbar variant="dense">
             <Typography
               variant="h6"
               color="inherit"

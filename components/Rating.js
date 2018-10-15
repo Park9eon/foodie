@@ -22,10 +22,11 @@ class Rating extends React.Component {
     const rating = Array.from(Array(max), (_, index) => (index < value ? 1 : 0));
     return (
       <div>
-        {rating.map((on, key) => (on ? <StarIcon fontSize="large"
-                                                 color="primary"
-                                                 key={key}/> : <StarBorderIcon fontSize="large" color="disabled"
-                                                                               key={key}/>))}
+        {rating.map((on, key) => (on ?
+          <StarIcon color="primary"
+                    key={key}/> :
+          <StarBorderIcon color="disabled"
+                          key={key}/>))}
       </div>
     );
   }
