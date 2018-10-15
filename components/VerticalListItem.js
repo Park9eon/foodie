@@ -21,8 +21,11 @@ class VerticalListItem extends React.Component {
   static propTypes = {
     classes: PropTypes.shape()
       .isRequired,
-    item: PropTypes.arrayOf(PropTypes.shape())
-      .isRequired,
+    item: PropTypes.shape({
+      name: PropTypes.string
+        .isRequired,
+      tags: PropTypes.arrayOf(PropTypes.string),
+    }).isRequired,
   };
 
   render() {

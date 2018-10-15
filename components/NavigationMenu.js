@@ -38,28 +38,31 @@ class NavigationMenu extends React.Component {
   };
 
   render() {
-    const { className, items, classes } = this.props;
+    const { className, items, classes, url } = this.props;
     return (
       <div className={className}>
         <List disablePadding={true}>
-          <ListItem>
+          <ListItem disableGutters={true}>
             <div className={classes.mapWrapper}>
               <Button className={classes.mapButton}
                       variant="contained"
                       color="primary">지도에서 보기</Button>
             </div>
           </ListItem>
-          <ListItem className={classes.dense}>
+          <ListItem disableGutters={true}
+                    className={classes.dense}>
             <Checkbox/>
             <ListItemText primary="최근"/>
           </ListItem>
-          <ListItem className={classes.dense}>
+          <ListItem disableGutters={true}
+                    className={classes.dense}>
             <Checkbox/>
             <ListItemText primary="추천"/>
           </ListItem>
-          <ListSubheader>태그</ListSubheader>
+          <ListSubheader disableGutters={true}>태그</ListSubheader>
           {items.map((item, index) => (
-            <ListItem className={classes.dense}
+            <ListItem disableGutters={true}
+                      className={classes.dense}
                       key={index}>
               <Checkbox/>
               <ListItemText primary={item}/>

@@ -1,4 +1,6 @@
 import React from 'react';
+import Link from 'next/link';
+import Router from 'next/router';
 import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -19,6 +21,7 @@ const styles = theme => ({
     maxWidth: '1280px',
     width: '100%',
     margin: '0 auto',
+    paddingRight: 0,
   },
   leftIcon: {
     marginRight: theme.spacing.unit,
@@ -86,19 +89,26 @@ class Header extends React.Component {
         >
           <Toolbar variant="dense"
                    className={classes.toolbar}>
-            <Typography
-              variant="h6"
-              color="inherit"
-              style={{
+            <Link href="/">
+              <a style={{
+                color: '#fff',
                 flexGrow: 1,
                 fontWeight: 700,
-              }}
-            >
-              MediexFoodie
-            </Typography>
+              }}>
+                <Typography
+                  variant="h6"
+                  color="inherit">
+                  MediexFoodie
+                </Typography>
+              </a>
+            </Link>
             <div className={classes.sectionDesktop}>
-              <Button color="inherit"><ListIcon/></Button>
-              <Button color="inherit"><MapIcon/></Button>
+              <Button color="inherit"
+                      onClick={() => Router.push('/')}>
+                <ListIcon/>
+              </Button>
+              <Button color="inherit"
+                      onClick={() => Router.push('/map')}><MapIcon/></Button>
               <Button
                 color="inherit"
                 aria-owns={isMenuOpen ? 'material-appbar' : null}

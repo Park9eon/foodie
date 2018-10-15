@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Link from 'next/link';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -9,9 +8,7 @@ import withLayout from '../lib/withLayout';
 import { getEateryList, getTagList } from '../lib/api/eatery';
 import Header from '../components/Header';
 import NavigationMenu from '../components/NavigationMenu';
-import SummaryList from '../components/SummaryList';
 import VerticalList from '../components/VerticalList';
-import HorizontalList from '../components/HorizontalList';
 
 const styles = theme => ({
   root: {
@@ -22,21 +19,14 @@ const styles = theme => ({
     marginTop: '48px',
     padding: theme.spacing.unit * 2,
   },
-  titleWrapper: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: theme.spacing.unit * 2,
-  },
   title: {
+    textAlign: 'center',
     fontWeight: 700,
-    flexGrow: 1,
-  },
-  section: {
     marginBottom: '48px',
   },
 });
 
-class Index extends React.Component {
+class Saerch extends React.Component {
   static propTypes = {
     classes: PropTypes.shape()
       .isRequired,
@@ -50,6 +40,7 @@ class Index extends React.Component {
   };
 
   async componentDidMount() {
+    console.log(this.props);
     const eateryList = await getEateryList();
     const tags = await getTagList();
     this.setState({
@@ -85,34 +76,10 @@ class Index extends React.Component {
             </Grid>
             <Grid item
                   xs={9}>
-              <div className={classes.titleWrapper}>
-                <Typography className={classes.title}
-                            variant="h5">추천태그</Typography>
-                <Link href="/search"><a>더보기</a></Link>
-              </div>
-              <SummaryList className={classes.section}
-                           items={tags2}/>
-              <div className={classes.titleWrapper}>
-                <Typography className={classes.title}
-                            variant="h5">추천맛집</Typography>
-                <Link href="/search"><a>더보기</a></Link>
-              </div>
-              <HorizontalList className={classes.section}
-                              items={eateryList}/>
-              <div className={classes.titleWrapper}>
-                <Typography className={classes.title}
-                            variant="h5">최근등록</Typography>
-                <Link href="/search"><a>더보기</a></Link>
-              </div>
-              <HorizontalList className={classes.section}
-                              items={eateryList}/>
-              <div className={classes.titleWrapper}>
-                <Typography className={classes.title}
-                            variant="h5">모든음식점</Typography>
-                <Link href="/search"><a>더보기</a></Link>
-              </div>
-              <VerticalList className={classes.section}
-                            items={eateryList}/>
+              <Typography className={classes.title}
+                          variant="h4">모든음식점</Typography>
+              <VerticalList
+                items={eateryList}/>
             </Grid>
           </Grid>
         </main>
@@ -121,4 +88,4 @@ class Index extends React.Component {
   }
 }
 
-export default withAuth(withLayout(withStyles(styles)(Index)), { loginRequired: true });
+export default withAuth(withLayout(withStyles(styles)(Saerch)), { loginRequired: true });
