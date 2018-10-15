@@ -20,9 +20,14 @@ const styles = theme => ({
     marginTop: '48px',
     padding: theme.spacing.unit * 2,
   },
+  titleWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: theme.spacing.unit * 2,
+  },
   title: {
     fontWeight: 700,
-    marginBottom: theme.spacing.unit * 2,
+    flexGrow: 1,
   },
   section: {
     marginBottom: '48px',
@@ -47,7 +52,7 @@ class Index extends React.Component {
     const tags = await getTagList();
     this.setState({
       eateryList,
-      tags
+      tags,
     });
   }
 
@@ -78,20 +83,32 @@ class Index extends React.Component {
             </Grid>
             <Grid item
                   xs={9}>
-              <Typography className={classes.title}
-                          variant="h5">추천태그</Typography>
+              <div className={classes.titleWrapper}>
+                <Typography className={classes.title}
+                            variant="h5">추천태그</Typography>
+                <a href="#">더보기</a>
+              </div>
               <SummaryList className={classes.section}
                            items={tags2}/>
-              <Typography className={classes.title}
-                          variant="h5">추천맛집</Typography>
+              <div className={classes.titleWrapper}>
+                <Typography className={classes.title}
+                            variant="h5">추천맛집</Typography>
+                <a href="#">더보기</a>
+              </div>
               <HorizontalList className={classes.section}
                               items={eateryList}/>
-              <Typography className={classes.title}
-                          variant="h5">최근등록</Typography>
+              <div className={classes.titleWrapper}>
+                <Typography className={classes.title}
+                            variant="h5">최근등록</Typography>
+                <a href="#">더보기</a>
+              </div>
               <HorizontalList className={classes.section}
                               items={eateryList}/>
-              <Typography className={classes.title}
-                          variant="h5">모든음식점</Typography>
+              <div className={classes.titleWrapper}>
+                <Typography className={classes.title}
+                            variant="h5">모든음식점</Typography>
+                <a href="#">더보기</a>
+              </div>
               <VerticalList className={classes.section}
                             items={eateryList}/>
             </Grid>

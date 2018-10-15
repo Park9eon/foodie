@@ -15,6 +15,11 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
 const styles = theme => ({
+  toolbar: {
+    maxWidth: '1280px',
+    width: '100%',
+    margin: '0 auto',
+  },
   leftIcon: {
     marginRight: theme.spacing.unit,
   },
@@ -79,7 +84,8 @@ class Header extends React.Component {
           color="primary"
           position="fixed"
         >
-          <Toolbar variant="dense">
+          <Toolbar variant="dense"
+                   className={classes.toolbar}>
             <Typography
               variant="h6"
               color="inherit"
@@ -91,15 +97,15 @@ class Header extends React.Component {
               MediexFoodie
             </Typography>
             <div className={classes.sectionDesktop}>
-              <Button color="inherit"><ListIcon /></Button>
-              <Button color="inherit"><MapIcon /></Button>
+              <Button color="inherit"><ListIcon/></Button>
+              <Button color="inherit"><MapIcon/></Button>
               <Button
                 color="inherit"
                 aria-owns={isMenuOpen ? 'material-appbar' : null}
                 aria-haspopup="true"
                 onClick={this.handleProfileMenuOpen}
               >
-                <AccountIcon className={classes.leftIcon} />
+                <AccountIcon className={classes.leftIcon}/>
                 {user.displayName}
               </Button>
             </div>
@@ -109,7 +115,7 @@ class Header extends React.Component {
                 onClick={this.handleMobileMenuOpen}
                 color="inherit"
               >
-                <MoreIcon />
+                <MoreIcon/>
               </IconButton>
             </div>
           </Toolbar>
@@ -144,19 +150,19 @@ class Header extends React.Component {
           onClose={this.handleMobileMenuClose}
         >
           <MenuItem>
-            <ListIcon className={classes.leftIcon} />
+            <ListIcon className={classes.leftIcon}/>
             <p>목록</p>
           </MenuItem>
           <MenuItem>
-            <MapIcon className={classes.leftIcon} />
+            <MapIcon className={classes.leftIcon}/>
             <p>지도</p>
           </MenuItem>
           <MenuItem disabled>
-            <AccountIcon className={classes.leftIcon} />
+            <AccountIcon className={classes.leftIcon}/>
             <p>내정보(준비중)</p>
           </MenuItem>
           <MenuItem onClick={this.logout}>
-            <ExitIcon className={classes.leftIcon} />
+            <ExitIcon className={classes.leftIcon}/>
             <p>로그아웃</p>
           </MenuItem>
         </Menu>

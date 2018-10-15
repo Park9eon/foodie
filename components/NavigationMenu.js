@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
@@ -48,9 +49,17 @@ class NavigationMenu extends React.Component {
                       color="primary">지도에서 보기</Button>
             </div>
           </ListItem>
+          <ListItem className={classes.dense}>
+            <Checkbox/>
+            <ListItemText primary="최근"/>
+          </ListItem>
+          <ListItem className={classes.dense}>
+            <Checkbox/>
+            <ListItemText primary="추천"/>
+          </ListItem>
+          <ListSubheader>태그</ListSubheader>
           {items.map((item, index) => (
-            <ListItem dense
-                      className={classes.dense}
+            <ListItem className={classes.dense}
                       key={index}>
               <Checkbox/>
               <ListItemText primary={item}/>
