@@ -35,10 +35,12 @@ class NavigationMenu extends React.Component {
       .isRequired,
     items: PropTypes.arrayOf(PropTypes.string)
       .isRequired,
+    onChange: PropTypes.func,
+    query: PropTypes.arrayOf(PropTypes.string),
   };
 
   render() {
-    const { className, items, classes, url } = this.props;
+    const { className, items, classes, onChange, query } = this.props;
     return (
       <div className={className}>
         <List disablePadding={true}>
@@ -51,12 +53,14 @@ class NavigationMenu extends React.Component {
           </ListItem>
           <ListItem disableGutters={true}
                     className={classes.dense}>
-            <Checkbox/>
+            <Checkbox onChange={() => onChange(-1)}
+                      checked={query && query.indexOf('최근') > -1}/>
             <ListItemText primary="최근"/>
           </ListItem>
           <ListItem disableGutters={true}
                     className={classes.dense}>
-            <Checkbox/>
+            <Checkbox onChange={() => onChange(-2)}
+                      checked={query && query.indexOf('추천') > -1}/>
             <ListItemText primary="추천"/>
           </ListItem>
           <ListSubheader disableGutters={true}>태그</ListSubheader>
@@ -64,7 +68,8 @@ class NavigationMenu extends React.Component {
             <ListItem disableGutters={true}
                       className={classes.dense}
                       key={index}>
-              <Checkbox/>
+              <Checkbox onChange={() => onChange(index)}
+                        checked={query && query.indexOf(item) > -1}/>
               <ListItemText primary={item}/>
             </ListItem>
           ))}
