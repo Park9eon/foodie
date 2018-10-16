@@ -1,9 +1,9 @@
 import React from 'react';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography/Typography';
 import Grid from '@material-ui/core/Grid';
-import Tags from './Tags';
 import Rating from './Rating';
 
 const styles = theme => ({
@@ -22,8 +22,11 @@ class VerticalListItem extends React.Component {
     classes: PropTypes.shape()
       .isRequired,
     item: PropTypes.shape({
+      _id: PropTypes.string
+        .isRequired,
       name: PropTypes.string
         .isRequired,
+      location: PropTypes.shape(),
       tags: PropTypes.arrayOf(PropTypes.string),
     }).isRequired,
   };
@@ -37,12 +40,22 @@ class VerticalListItem extends React.Component {
         <Grid item
               xs={3}
               className={classes.imageWrapper}>
-          <img className={classes.image}
-               src={item.photos[0] || '/static/img_default.png'}/>
+          <Link as={`/review/${item._id}`}
+                href={`/review?id=${item._id}`}>
+            <a>
+              <img className={classes.image}
+                   src={item.photos[0] || '/static/img_default.png'}/>
+            </a>
+          </Link>
         </Grid>
         <Grid item
               xs={9}>
-          <Typography variant="h6">{item.name}</Typography>
+          <Typography variant="h6">
+            <Link as={`/review/${item._id}`}
+                  href={`/review?id=${item._id}`}>
+              <a>{item.name}</a>
+            </Link>
+          </Typography>
           <Rating
             value={1}
             max={5}

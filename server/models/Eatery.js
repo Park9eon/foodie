@@ -9,6 +9,9 @@ const EaterySchema = new Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String,
+  },
   address: {
     type: String,
   },
@@ -30,9 +33,24 @@ class EateryClass {
     const results = await this.find(
       {
         $or: [
-          { name: { $regex: query, $options: 'i' } },
-          { address: { $regex: query, $options: 'i' } },
-          { tags: { $regex: query, $options: 'i' } },
+          {
+            name: {
+              $regex: query,
+              $options: 'i'
+            }
+          },
+          {
+            address: {
+              $regex: query,
+              $options: 'i'
+            }
+          },
+          {
+            tags: {
+              $regex: query,
+              $options: 'i'
+            }
+          },
         ],
       },
     );
@@ -50,14 +68,34 @@ class EateryClass {
   }
 
   static async add({
-    name,
-    address,
-    location,
-    photos,
-    tags,
-  }) {
+                     name,
+                     address,
+                     location,
+                     photos,
+                     tags,
+                   }) {
     const result = await this.create({
-      name, address, location, tags, photos,
+      name,
+      address,
+      location,
+      tags,
+      photos,
+    });
+    return result;
+  }
+
+  static async addReview({
+                           _id,
+                           rating,
+                           review,
+                         }) {
+    const result = await this.updateOne({ _id }, {
+      $push: {
+        reviews: {
+          rating,
+          review,
+        },
+      },
     });
     return result;
   }
@@ -73,7 +111,11 @@ class EateryClass {
       { _id: id },
       {
         $set: {
-          name, address, location, tags, photos,
+          name,
+          address,
+          location,
+          tags,
+          photos,
         },
       },
     );

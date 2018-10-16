@@ -1,4 +1,5 @@
 import React from 'react';
+import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -10,7 +11,7 @@ class VerticalList extends React.Component {
   static propTypes = {
     classes: PropTypes.shape()
       .isRequired,
-    items: PropTypes.arrayOf(PropTypes.shape({}))
+    items: PropTypes.arrayOf(PropTypes.shape())
       .isRequired,
   };
 

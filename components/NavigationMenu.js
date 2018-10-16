@@ -1,4 +1,5 @@
 import React from 'react';
+import Router from 'next/router';
 import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -51,6 +52,13 @@ class NavigationMenu extends React.Component {
                       color="primary">지도에서 보기</Button>
             </div>
           </ListItem>
+          {query && query.length > 0 &&
+          <ListItem>
+            <Button variant="contained"
+                    style={{ width: '100%' }}
+                    onClick={() => Router.push('/')}
+                    color="primary">태그 모두지우기</Button>
+          </ListItem>}
           <ListItem disableGutters={true}
                     className={classes.dense}>
             <Checkbox onChange={() => onChange(-1)}

@@ -14,18 +14,28 @@ class Rating extends React.Component {
       .isRequired,
     max: PropTypes.number
       .isRequired,
-    onRate: PropTypes.func,
+    onChange: PropTypes.func,
+    fontSize: PropTypes.string,
+  };
+
+  static defaultProps = {
+    onChange: null,
+    fontSize: 'default',
   };
 
   render() {
-    const { classes, value, max } = this.props;
+    const { classes, value, max, onChange, fontSize } = this.props;
     const rating = Array.from(Array(max), (_, index) => (index < value ? 1 : 0));
     return (
       <div>
         {rating.map((on, key) => (on ?
           <StarIcon color="primary"
-                    key={key}/> :
+                    fontSize={fontSize}
+                    key={key}
+                    onClick={onChange && (() => onChange(key + 1))}/> :
           <StarBorderIcon color="disabled"
+                          fontSize={fontSize}
+                          onClick={onChange && (() => onChange(key + 1))}
                           key={key}/>))}
       </div>
     );

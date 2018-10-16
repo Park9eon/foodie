@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 import { withRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -103,6 +104,9 @@ class Search extends React.Component {
     }];
     return (
       <div>
+        <Head>
+          <title>Mediex Foodie - 찾아보기</title>
+        </Head>
         <Header user={user}/>
         <main className={classes.root}>
           <Grid container
@@ -115,8 +119,6 @@ class Search extends React.Component {
             </Grid>
             <Grid item
                   xs={9}>
-              <Typography className={classes.title}
-                          variant="h4">모든음식점</Typography>
               <VerticalList
                 items={eateryList}/>
             </Grid>

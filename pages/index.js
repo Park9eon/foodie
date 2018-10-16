@@ -1,5 +1,6 @@
 import React from 'react';
 import Router from 'next/router';
+import Head from 'next/head';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { withStyles } from '@material-ui/core/styles';
@@ -97,6 +98,9 @@ class Index extends React.Component {
     }];
     return (
       <div>
+        <Head>
+          <title>Mediex Foodie</title>
+        </Head>
         <Header user={user}/>
         <main className={classes.root}>
           <Grid container

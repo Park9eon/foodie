@@ -77,6 +77,15 @@ function api(server) {
       res.json({ error: err.message || err.toString() });
     }
   });
+  // 음식점
+  router.get('/:id', async (req, res) => {
+    try {
+      const results = await Eatery.findById(req.params.id);
+      res.json(results);
+    } catch (err) {
+      res.json({ error: err.message || err.toString() });
+    }
+  });
   // 음식점 등록
   router.post('/', authorization(), upload.array('images', 12), async (req, res) => {
     try {
@@ -101,6 +110,22 @@ function api(server) {
     try {
       const result = await Eatery.edit(req.params.id, req.body);
       res.json(result);
+    } catch (err) {
+      res.json({ error: err.message || err.toString() });
+    }
+  });
+  // 음식점 리뷰 추가
+  router.put('/:id/review', authorization(), async (req, res) => {
+    try {
+      const { rating, review } = req.body;
+      const _id = req.params.id;
+      const result = await Eatery.addReview({
+        _id,
+        rating,
+        review,
+      });
+      res.json(result);
+      console.log(result);
     } catch (err) {
       res.json({ error: err.message || err.toString() });
     }

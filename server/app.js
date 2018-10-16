@@ -73,6 +73,15 @@ app.prepare()
 
     api(server);
 
+    server.get('/review/:id', (req, res) => {
+      const { id } = req.params;
+      if (id) {
+        app.render(req, res, '/review', { id });
+      } else {
+        res.redirect('/');
+      }
+    });
+
     server.get('*', (req, res) => {
       handle(req, res);
     });
