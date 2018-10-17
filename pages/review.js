@@ -12,6 +12,7 @@ import Header from '../components/Header';
 import NavigationMenu from '../components/NavigationMenu';
 import Rating from '../components/Rating';
 import ReviewList from '../components/ReviewList';
+import { getRating } from '../lib/utlis';
 
 const styles = theme => ({
   root: {
@@ -93,7 +94,7 @@ class Review extends React.Component {
   render() {
     const { user, classes } = this.props;
     const { eatery, tags } = this.state;
-    console.log(eatery);
+    const rating = getRating(eatery);
     return (
       <div>
         <Head>
@@ -115,13 +116,13 @@ class Review extends React.Component {
                   {eatery.name}
                 </Typography>
                 <Rating
-                  value={1}
+                  value={rating}
                   max={5}
                 />
                 <div>
-                  {eatery.location && eatery.location.address && <p>{eatery.location.address}</p>}
-                  {eatery.tag && eatery.tag.length > 0 && <p>{eatery.tag.join(',')}</p>}
-                  {eatery.description && <p>{eatery.description}</p>}
+                  {eatery.location && eatery.location.address && <span>{eatery.location.address}</span>}
+                  {eatery.tags && eatery.tags.length > 0 && <span>{eatery.tags.join(', ')}</span>}
+                  {eatery.description && <span>{eatery.description}</span>}
                 </div>
                 <Grid container
                       spacing={8}>

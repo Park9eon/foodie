@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography/Typography';
 import Grid from '@material-ui/core/Grid/Grid';
 import Rating from './Rating';
+import { getRating } from '../lib/utlis';
 
 const styles = theme => ({
   imageWrapper: {
@@ -33,6 +34,7 @@ class HorizontalListItem extends React.Component {
 
   render() {
     const { className, classes, item } = this.props;
+    const rating = getRating(item);
     return (
       <Grid container
             className={className}>
@@ -56,7 +58,7 @@ class HorizontalListItem extends React.Component {
             </Link>
           </Typography>
           <Rating
-            value={1}
+            value={rating}
             max={5}
           />
           <span>{item.tags && item.tags.join(', ')}</span>

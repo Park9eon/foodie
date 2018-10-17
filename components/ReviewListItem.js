@@ -16,6 +16,7 @@ class ReviewListItem extends React.Component {
     const { classes, item } = this.props;
     return (
       <div>
+        {item.review}
       </div>
     );
   }

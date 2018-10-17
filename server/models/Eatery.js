@@ -22,6 +22,7 @@ const EaterySchema = new Schema({
   },
   tags: [String],
   reviews: [{
+    userId: ObjectId,
     rating: Number,
     review: String,
   }],
