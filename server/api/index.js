@@ -80,7 +80,8 @@ function api(server) {
   // 음식점
   router.get('/:id', async (req, res) => {
     try {
-      const results = await Eatery.findById(req.params.id);
+      const results = await Eatery.getOne(req.params.id);
+      console.log(results);
       res.json(results);
     } catch (err) {
       res.json({ error: err.message || err.toString() });
@@ -119,10 +120,12 @@ function api(server) {
     try {
       const { rating, review } = req.body;
       const _id = req.params.id;
+      const user = req.user;
       const result = await Eatery.addReview({
         _id,
         rating,
         review,
+        user,
       });
       res.json(result);
       console.log(result);

@@ -37,20 +37,20 @@ class EateryClass {
           {
             name: {
               $regex: query,
-              $options: 'i'
-            }
+              $options: 'i',
+            },
           },
           {
             address: {
               $regex: query,
-              $options: 'i'
-            }
+              $options: 'i',
+            },
           },
           {
             tags: {
               $regex: query,
-              $options: 'i'
-            }
+              $options: 'i',
+            },
           },
         ],
       },
@@ -89,10 +89,12 @@ class EateryClass {
                            _id,
                            rating,
                            review,
+                           user,
                          }) {
     const result = await this.updateOne({ _id }, {
       $push: {
         reviews: {
+          userId: user._id,
           rating,
           review,
         },
@@ -126,6 +128,73 @@ class EateryClass {
   static async del(id) {
     const result = await this.deleteOne({ _id: id });
     return result;
+  }
+
+  static async getOne(id) {
+    const result = await this.aggregate([
+      {
+        $match: {
+          _id: mongoose.Types.ObjectId(id),
+        },
+      },
+      {
+        $unwind: '$reviews',
+      },
+      {
+        $lookup: {
+          from: 'users',
+          let: { a: '$reviews.userId' },
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    {
+                      $eq: ['$_id', '$$a'],
+                    },
+                  ],
+                },
+              },
+            },
+            {
+              $project: {
+                displayName: 1,
+                avatarUrl: 1,
+              },
+            },
+          ],
+          as: 'reviews.user',
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          description: 1,
+          photos: 1,
+          address: 1,
+          tags: 1,
+          reviews: {
+            rating: 1,
+            review: 1,
+            user: {
+              $arrayElemAt: ['$reviews.user', 0],
+            },
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$_id',
+          name: { $first: '$name' },
+          description: { $first: '$description' },
+          address: { $first: '$address' },
+          photos: { $first: '$photos' },
+          tags: { $first: '$tags' },
+          reviews: { $push: '$reviews' },
+        },
+      },
+    ]);
+    return result[0];
   }
 }
 
