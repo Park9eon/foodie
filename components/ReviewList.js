@@ -1,4 +1,5 @@
 import React from 'react';
+import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -54,7 +55,7 @@ class ReviewList extends React.Component {
         rating,
         review,
       });
-      console.log(result);
+      Router.push(`/review/${id}`);
     } catch (err) {
       console.log(err);
     }
@@ -66,27 +67,37 @@ class ReviewList extends React.Component {
     return (
       <div>
         <div>
-          <Rating onChange={this.handleRating}
-                  fontSize="large"
-                  value={rating}
-                  max={5}/>
+          <Rating
+            onChange={this.handleRating}
+            fontSize="large"
+            value={rating}
+            max={5}
+          />
           <div>
-            <TextField multiline
-                       label="리뷰남기기"
-                       onChange={this.handleChange}
-                       className={classes.textField}
-                       rows="5"/>
+            <TextField
+              multiline
+              label="리뷰남기기"
+              onChange={this.handleChange}
+              className={classes.textField}
+              rows="5"
+            />
           </div>
           <div>
-            <Button color="primary"
-                    className={classes.button}
-                    onClick={this.handleSubmit}
-                    variant="contained">리뷰 남기기</Button>
+            <Button
+              color="primary"
+              className={classes.button}
+              onClick={this.handleSubmit}
+              variant="contained"
+            >
+리뷰 남기기
+            </Button>
           </div>
         </div>
         {items.map((item, index) => (
-          <ReviewListItem key={index}
-                          item={item}/>
+          <ReviewListItem
+            key={index}
+            item={item}
+          />
         ))}
       </div>
     );

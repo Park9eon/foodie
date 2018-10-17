@@ -1,8 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Avatar from '@material-ui/core/Avatar';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import Rating from './Rating';
 
-const styles = theme => ({});
+const styles = theme => ({
+  root: {
+    padding: `${theme.spacing.unit * 2}px 0`,
+  },
+});
 
 class ReviewListItem extends React.Component {
   static propTypes = {
@@ -14,9 +22,24 @@ class ReviewListItem extends React.Component {
 
   render() {
     const { classes, item } = this.props;
+    const { user } = item;
     return (
-      <div>
-        {item.review}
+      <div  className={classes.root}>
+        <Grid container
+              spacing={8}>
+          <Grid item>
+            <Avatar
+              src={user && user.avatarUrl || '/static/img_avatar.png'}
+            />
+          </Grid>
+          <Grid item sm>
+            <Typography variant="h6">{user && user.displayName}</Typography>
+            <Rating value={item.rating} max={5}/>
+            <div>
+              {item.review}
+            </div>
+          </Grid>
+        </Grid>
       </div>
     );
   }
