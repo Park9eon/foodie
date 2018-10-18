@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -29,7 +30,9 @@ class SummaryList extends React.Component {
             <Grid item
                   key={index}
                   xs={4}>
-              <SummaryListItem item={item}/>
+              <Link href={`/search?q=${item.tag}`}>
+                <a><SummaryListItem item={item}/></a>
+              </Link>
             </Grid>
           ))}
         </Grid>

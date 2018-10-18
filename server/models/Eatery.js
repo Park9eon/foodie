@@ -21,40 +21,75 @@ const EaterySchema = new Schema({
     lat: Number, // 위도
   },
   tags: [String],
+  createdAt: {
+    type: Date,
+    required: true,
+    default: Date.now(),
+  },
   reviews: [{
     userId: ObjectId,
-    rating: Number,
-    review: String,
+    rating: {
+      type: Number,
+      required: true,
+    },
+    review: {
+      type: String,
+      required: true,
+    },
   }],
   photos: [String],
 });
 
 class EateryClass {
-  static async search(query) {
-    const results = await this.find(
+  static async search({ q, size = 100 }) {
+    const sort = { name: 1, rating: -1 };
+    let regex = q;
+    if (regex.indexOf('최근') > -1) {
+      sort.createAt = 1;
+    }
+    if (regex.indexOf('추천') > -1) {
+      sort.rating = -1;
+    }
+    const results = await this.aggregate([
       {
-        $or: [
-          {
-            name: {
-              $regex: query,
-              $options: 'i',
+        $match: {
+          $or: [
+            {
+              name: {
+                $regex: regex,
+                $options: 'i',
+              },
             },
-          },
-          {
-            address: {
-              $regex: query,
-              $options: 'i',
+            {
+              description: {
+                $regex: regex,
+                $options: 'i',
+              },
             },
-          },
-          {
-            tags: {
-              $regex: query,
-              $options: 'i',
+            {
+              tags: {
+                $regex: regex,
+                $options: 'i',
+              },
             },
-          },
-        ],
+          ],
+        },
       },
-    );
+      {
+        $project: {
+          name: 1,
+          description: 1,
+          photos: 1,
+          address: 1,
+          tags: 1,
+          rating: { $avg: '$reviews.rating' },
+          reviews: 1,
+        },
+      },
+      {
+        $limit: size,
+      },
+    ]);
     return results;
   }
 
@@ -66,68 +101,6 @@ class EateryClass {
   static async list() {
     const results = await this.find({});
     return results;
-  }
-
-  static async add({
-    name,
-    address,
-    location,
-    photos,
-    tags,
-  }) {
-    const result = await this.create({
-      name,
-      address,
-      location,
-      tags,
-      photos,
-    });
-    return result;
-  }
-
-  static async addReview({
-    _id,
-    rating,
-    review,
-    user,
-  }) {
-    const result = await this.updateOne({ _id }, {
-      $push: {
-        reviews: {
-          userId: user._id,
-          rating,
-          review,
-        },
-      },
-    });
-    return result;
-  }
-
-  static async edit(id, {
-    name,
-    address,
-    location,
-    tags,
-    photos,
-  }) {
-    const result = await this.updateOne(
-      { _id: id },
-      {
-        $set: {
-          name,
-          address,
-          location,
-          tags,
-          photos,
-        },
-      },
-    );
-    return result;
-  }
-
-  static async del(id) {
-    const result = await this.deleteOne({ _id: id });
-    return result;
   }
 
   static async getOne(id) {
@@ -198,6 +171,88 @@ class EateryClass {
       },
     ]);
     return result[0];
+  }
+
+  static async add({
+                     name,
+                     address,
+                     location,
+                     photos,
+                     tags,
+                   }) {
+    const result = await this.create({
+      name,
+      address,
+      location,
+      tags,
+      photos,
+    });
+    return result;
+  }
+
+  static async addReview({
+                           _id,
+                           rating,
+                           review,
+                           user,
+                         }) {
+    const result = await this.updateOne({ _id }, {
+      $push: {
+        reviews: {
+          userId: user._id,
+          rating,
+          review,
+        },
+      },
+    });
+    return result;
+  }
+
+  static async editReview({
+                            _id,
+                            reviewId,
+                            rating,
+                            review,
+                          }) {
+    const result = await this.updateOne({
+      _id,
+      'reviews._id': reviewId,
+    }, {
+      $set: {
+        'reviews.$': {
+          rating,
+          review,
+        },
+      },
+    });
+    return result;
+  }
+
+  static async edit(id, {
+    name,
+    address,
+    location,
+    tags,
+    photos,
+  }) {
+    const result = await this.updateOne(
+      { _id: id },
+      {
+        $set: {
+          name,
+          address,
+          location,
+          tags,
+          photos,
+        },
+      },
+    );
+    return result;
+  }
+
+  static async del(id) {
+    const result = await this.deleteOne({ _id: id });
+    return result;
   }
 }
 

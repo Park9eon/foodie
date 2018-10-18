@@ -26,6 +26,7 @@ const styles = theme => ({
   text: {
     color: '#fff',
     position: 'absolute',
+    fontWeight: '700',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -52,7 +53,7 @@ class SummaryListItem extends React.Component {
         <div className={classes.textWrapper}>
           <Typography variant="h6"
                       className={classes.text}>
-            {item.text}
+            {item.tag}
           </Typography>
         </div>
       </div>

@@ -47,41 +47,13 @@ function authorization({ isAdminOnly = false } = {}) {
 }
 
 function api(server) {
-  const port = process.env.PORT || 8000;
-  const dev = process.env.NODE_ENV !== 'production';
-  const ROOT_URL = dev ? `http://localhost:${port}` : `${process.env.PROD_URL}`;
   // 음식점 목록
   router.get('/', async (req, res) => {
+    const { q, size } = req.query;
     try {
-      const results = await Eatery.list();
-      res.json(results);
-    } catch (err) {
-      res.json({ error: err.message || err.toString() });
-    }
-  });
-  // 음식점 검색
-  router.get('/search', async (req, res) => {
-    try {
-      const results = await Eatery.search(req.query.q);
-      res.json(results);
-    } catch (err) {
-      res.json({ error: err.message || err.toString() });
-    }
-  });
-  // 태그목록
-  router.get('/tags', async (req, res) => {
-    try {
-      const results = await Eatery.tags();
-      res.json(results);
-    } catch (err) {
-      res.json({ error: err.message || err.toString() });
-    }
-  });
-  // 음식점
-  router.get('/:id', async (req, res) => {
-    try {
-      const results = await Eatery.getOne(req.params.id);
-      console.log(results);
+      const results = await Eatery.search({
+        q, size: parseFloat(size),
+      });
       res.json(results);
     } catch (err) {
       res.json({ error: err.message || err.toString() });
@@ -106,6 +78,46 @@ function api(server) {
       res.json({ error: err.message || err.toString() });
     }
   });
+  // 태그목록
+  router.get('/tags', async (req, res) => {
+    try {
+      const results = await Eatery.tags();
+      res.json(results);
+    } catch (err) {
+      res.json({ error: err.message || err.toString() });
+    }
+  });
+  // 추천 태그
+  router.get('/tags/recommend', async (req, res) => {
+    res.json([{
+      tag: '가성비',
+      image: '/static/tag_1.jpg',
+    }, {
+      tag: '회식',
+      image: '/static/tag_2.jpg',
+    }, {
+      tag: '점심',
+      image: '/static/tag_3.jpg',
+    }, {
+      tag: '저녁',
+      image: '/static/tag_4.jpg',
+    }, {
+      tag: '근사한',
+      image: '/static/tag_5.jpg',
+    }, {
+      tag: '술',
+      image: '/static/tag_6.jpg',
+    }]);
+  });
+  // 음식점
+  router.get('/:id', async (req, res) => {
+    try {
+      const results = await Eatery.getOne(req.params.id);
+      res.json(results);
+    } catch (err) {
+      res.json({ error: err.message || err.toString() });
+    }
+  });
   // 음식점 수정
   router.put('/:id', authorization(), async (req, res) => {
     try {
@@ -116,7 +128,7 @@ function api(server) {
     }
   });
   // 음식점 리뷰 추가
-  router.put('/:id/review', authorization(), async (req, res) => {
+  router.post('/:id/review', authorization(), async (req, res) => {
     try {
       const { rating, review } = req.body;
       const _id = req.params.id;
@@ -126,6 +138,21 @@ function api(server) {
         rating,
         review,
         user,
+      });
+      res.json(result);
+    } catch (err) {
+      res.json({ error: err.message || err.toString() });
+    }
+  });
+  router.put('/:id/review/:reviewId', authorization(), async (req, res) => {
+    try {
+      const { rating, review } = req.body;
+      const { id, reviewId } = req.params;
+      const result = await Eatery.addReview({
+        _id: id,
+        reviewId,
+        rating,
+        review,
       });
       res.json(result);
     } catch (err) {

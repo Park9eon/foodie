@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
-import { getEateryList, getTagList } from '../lib/api/eatery';
+import { search, getTagList, getRecommendTagList } from '../lib/api/eatery';
 import Header from '../components/Header';
 import NavigationMenu from '../components/NavigationMenu';
 import SummaryList from '../components/SummaryList';
@@ -53,15 +53,24 @@ class Index extends React.Component {
 
   state = {
     eateryList: [],
+    recommendEateryList: [],
+    recentEateryList: [],
     tags: [],
+    recommendTags: [],
   };
 
   async componentDidMount() {
-    const eateryList = await getEateryList();
+    const eateryList = await search('', 5);
+    const recommendEateryList = await search('추천', 4);
+    const recentEateryList = await search('최근', 4);
+    const recommendTags = await getRecommendTagList();
     const tags = await getTagList();
     this.setState({
       eateryList,
+      recommendEateryList,
+      recentEateryList,
       tags,
+      recommendTags,
     });
   }
 
@@ -82,20 +91,7 @@ class Index extends React.Component {
 
   render() {
     const { user, classes } = this.props;
-    const { eateryList, tags } = this.state;
-    const tags2 = [{
-      text: '중국집',
-      image: '/static/upload/5bbefc071f0af5f400a726e2.jpg',
-    }, {
-      text: '급식',
-      image: '/static/upload/5bbefc071f0af5f400a726e2.jpg',
-    }, {
-      text: '저렴한',
-      image: '/static/upload/5bbefc071f0af5f400a726e2.jpg',
-    }, {
-      text: '한식',
-      image: '/static/upload/5bbefc071f0af5f400a726e2.jpg',
-    }];
+    const { eateryList, recommendEateryList, recentEateryList, tags, recommendTags } = this.state;
     return (
       <div>
         <Head>
@@ -115,30 +111,27 @@ class Index extends React.Component {
               <div className={classes.titleWrapper}>
                 <Typography className={classes.title}
                             variant="h5">추천태그</Typography>
-                <Link href="/search">
-                  <a>더보기</a>
-                </Link>
               </div>
               <SummaryList className={classes.section}
-                           items={tags2}/>
+                           items={recommendTags}/>
               <div className={classes.titleWrapper}>
                 <Typography className={classes.title}
                             variant="h5">추천맛집</Typography>
-                <Link href="/search">
+                <Link href="/search?q=추천">
                   <a>더보기</a>
                 </Link>
               </div>
               <HorizontalList className={classes.section}
-                              items={eateryList}/>
+                              items={recommendEateryList}/>
               <div className={classes.titleWrapper}>
                 <Typography className={classes.title}
                             variant="h5">최근등록</Typography>
-                <Link href="/search">
+                <Link href="/search?q=최근">
                   <a>더보기</a>
                 </Link>
               </div>
               <HorizontalList className={classes.section}
-                              items={eateryList}/>
+                              items={recentEateryList}/>
               <div className={classes.titleWrapper}>
                 <Typography className={classes.title}
                             variant="h5">모든음식점</Typography>

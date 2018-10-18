@@ -4,10 +4,9 @@ import { withRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
-import { getEateryList, getTagList } from '../lib/api/eatery';
+import { search, getTagList } from '../lib/api/eatery';
 import Header from '../components/Header';
 import NavigationMenu from '../components/NavigationMenu';
 import VerticalList from '../components/VerticalList';
@@ -50,15 +49,23 @@ class Search extends React.Component {
 
   async componentDidMount() {
     const { router: { query: { q } } } = this.props;
-    const query = (q && q.split(',')) || [];
+    const query = (q && q.split('|')) || [];
 
-    const eateryList = await getEateryList();
+    const eateryList = await search(q);
     const tags = await getTagList();
 
     this.setState({
       eateryList,
       tags,
       query,
+    });
+  }
+
+  async componentWillReceiveProps(nextProps) {
+    const { router: { query: { q } } } = nextProps;
+    const eateryList = await search(q);
+    this.setState({
+      eateryList,
     });
   }
 
@@ -82,26 +89,13 @@ class Search extends React.Component {
     }
     return router.push({
       pathname: '/search',
-      query: { q: query.join(',') },
+      query: { q: query.join('|') },
     });
   }
 
   render() {
     const { user, classes } = this.props;
     const { eateryList, tags, query } = this.state;
-    const tags2 = [{
-      text: '중국집',
-      image: '/static/upload/5bbefc071f0af5f400a726e2.jpg',
-    }, {
-      text: '급식',
-      image: '/static/upload/5bbefc071f0af5f400a726e2.jpg',
-    }, {
-      text: '저렴한',
-      image: '/static/upload/5bbefc071f0af5f400a726e2.jpg',
-    }, {
-      text: '한식',
-      image: '/static/upload/5bbefc071f0af5f400a726e2.jpg',
-    }];
     return (
       <div>
         <Head>
