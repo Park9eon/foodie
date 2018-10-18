@@ -69,12 +69,12 @@ class EateryClass {
   }
 
   static async add({
-                     name,
-                     address,
-                     location,
-                     photos,
-                     tags,
-                   }) {
+    name,
+    address,
+    location,
+    photos,
+    tags,
+  }) {
     const result = await this.create({
       name,
       address,
@@ -86,11 +86,11 @@ class EateryClass {
   }
 
   static async addReview({
-                           _id,
-                           rating,
-                           review,
-                           user,
-                         }) {
+    _id,
+    rating,
+    review,
+    user,
+  }) {
     const result = await this.updateOne({ _id }, {
       $push: {
         reviews: {
@@ -138,7 +138,10 @@ class EateryClass {
         },
       },
       {
-        $unwind: '$reviews',
+        $unwind: {
+          path: '$reviews',
+          preserveNullAndEmptyArrays: true,
+        },
       },
       {
         $lookup: {

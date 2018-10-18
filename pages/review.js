@@ -120,7 +120,8 @@ class Review extends React.Component {
                   max={5}
                 />
                 <div>
-                  {eatery.location && eatery.location.address && <span>{eatery.location.address}</span>}
+                  {eatery.location && eatery.location.address &&
+                  <span>{eatery.location.address}</span>}
                   {eatery.tags && eatery.tags.length > 0 && <span>{eatery.tags.join(', ')}</span>}
                   {eatery.description && <span>{eatery.description}</span>}
                 </div>
@@ -153,8 +154,11 @@ class Review extends React.Component {
                 </Grid>
               </div>
               <Typography variant="h4">리뷰</Typography>
-              <ReviewList id={eatery._id}
-                          items={eatery.reviews}/>
+              <div>
+                <ReviewList id={eatery._id}
+                            user={user}
+                            items={eatery.reviews}/>
+              </div>
             </Grid>}
           </Grid>
         </main>

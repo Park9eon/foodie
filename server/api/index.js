@@ -128,7 +128,6 @@ function api(server) {
         user,
       });
       res.json(result);
-      console.log(result);
     } catch (err) {
       res.json({ error: err.message || err.toString() });
     }
