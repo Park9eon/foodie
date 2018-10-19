@@ -4,6 +4,7 @@ import Router from 'next/router';
 import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
+import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import ListIcon from '@material-ui/icons/List';
@@ -16,14 +17,16 @@ import ExitIcon from '@material-ui/icons/ExitToApp';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
-const styles = theme => ({
+const styles = (theme) => ({
   toolbar: {
     maxWidth: '1280px',
     width: '100%',
     margin: '0 auto',
     paddingRight: 0,
   },
-  leftIcon: {
+  avatar: {
+    width: 20,
+    height: 20,
     marginRight: theme.spacing.unit,
   },
   sectionDesktop: {
@@ -80,13 +83,10 @@ class Header extends React.Component {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
     return (
       <div>
-        <AppBar
-          color="primary"
-          position="fixed"
-        >
+        <AppBar color="primary"
+                position="fixed">
           <Toolbar variant="dense"
                    className={classes.toolbar}>
             <Link href="/">
@@ -95,9 +95,8 @@ class Header extends React.Component {
                 flexGrow: 1,
                 fontWeight: 700,
               }}>
-                <Typography
-                  variant="h6"
-                  color="inherit">
+                <Typography variant="h6"
+                            color="inherit">
                   MediexFoodie
                 </Typography>
               </a>
@@ -108,57 +107,55 @@ class Header extends React.Component {
                 <ListIcon/>
               </Button>
               <Button color="inherit"
-                      onClick={() => Router.push('/map')}><MapIcon/></Button>
-              <Button
-                color="inherit"
-                aria-owns={isMenuOpen ? 'material-appbar' : null}
-                aria-haspopup="true"
-                onClick={this.handleProfileMenuOpen}
-              >
-                <AccountIcon className={classes.leftIcon}/>
+                      onClick={() => Router.push('/map')}>
+                <MapIcon/>
+              </Button>
+              <Button color="inherit"
+                      aria-owns={isMenuOpen ? 'material-appbar' : null}
+                      aria-haspopup="true"
+                      onClick={this.handleProfileMenuOpen}>
+                <Avatar alt={user.displayName}
+                        src={user.avatarUrl}
+                        className={classes.avatar}>
+                  <AccountIcon/>
+                </Avatar>
                 {user.displayName}
               </Button>
             </div>
             <div className={classes.sectionMobile}>
-              <IconButton
-                aria-haspopup="true"
-                onClick={this.handleMobileMenuOpen}
-                color="inherit"
-              >
+              <IconButton aria-haspopup="true"
+                          onClick={this.handleMobileMenuOpen}
+                          color="inherit">
                 <MoreIcon/>
               </IconButton>
             </div>
           </Toolbar>
         </AppBar>
-        <Menu
-          anchorEl={anchorEl}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          open={isMenuOpen}
-          onClose={this.handleMenuClose}
-        >
+        <Menu anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={isMenuOpen}
+              onClose={this.handleMenuClose}>
           <MenuItem disabled>내정보(준비중)</MenuItem>
           <MenuItem onClick={this.logout}>로그아웃</MenuItem>
         </Menu>
-        <Menu
-          anchorEl={mobileMoreAnchorEl}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }}
-          open={isMobileMenuOpen}
-          onClose={this.handleMobileMenuClose}
-        >
+        <Menu anchorEl={mobileMoreAnchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={isMobileMenuOpen}
+              onClose={this.handleMobileMenuClose}>
           <MenuItem>
             <ListIcon className={classes.leftIcon}/>
             <p>목록</p>
