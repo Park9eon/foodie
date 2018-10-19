@@ -15,26 +15,31 @@ import SummaryList from '../components/SummaryList';
 import VerticalList from '../components/VerticalList';
 import HorizontalList from '../components/HorizontalList';
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     maxWidth: '1280px',
     width: '100%',
     margin: '0 auto',
     flexGrow: 1,
-    marginTop: '48px',
+    marginTop: '24px',
     padding: theme.spacing.unit * 2,
+  },
+  navigationWrapper: {
+    marginTop: '24px',
+    marginBottom: '24px',
   },
   titleWrapper: {
     display: 'flex',
     alignItems: 'center',
-    marginBottom: theme.spacing.unit * 2,
+    marginTop: '24px',
+    marginBottom: '12px',
   },
   title: {
     fontWeight: 700,
     flexGrow: 1,
   },
   section: {
-    marginBottom: '48px',
+    marginBottom: '24px',
   },
 });
 
@@ -91,7 +96,9 @@ class Index extends React.Component {
 
   render() {
     const { user, classes } = this.props;
-    const { eateryList, recommendEateryList, recentEateryList, tags, recommendTags } = this.state;
+    const {
+      eateryList, recommendEateryList, recentEateryList, tags, recommendTags,
+    } = this.state;
     return (
       <div>
         <Head>
@@ -103,20 +110,26 @@ class Index extends React.Component {
                 spacing={16}>
             <Grid item
                   xs={3}>
-              <NavigationMenu onChange={this.handleCheckbox}
-                              items={tags}/>
+              <div className={classes.navigationWrapper}>
+                <NavigationMenu onChange={this.handleCheckbox}
+                                items={tags}/>
+              </div>
             </Grid>
             <Grid item
                   xs={9}>
               <div className={classes.titleWrapper}>
                 <Typography className={classes.title}
-                            variant="h5">추천태그</Typography>
+                            variant="h5">
+                  추천태그
+                </Typography>
               </div>
               <SummaryList className={classes.section}
                            items={recommendTags}/>
               <div className={classes.titleWrapper}>
                 <Typography className={classes.title}
-                            variant="h5">추천맛집</Typography>
+                            variant="h5">
+                  추천맛집
+                </Typography>
                 <Link href="/search?q=추천">
                   <a>더보기</a>
                 </Link>
@@ -125,7 +138,9 @@ class Index extends React.Component {
                               items={recommendEateryList}/>
               <div className={classes.titleWrapper}>
                 <Typography className={classes.title}
-                            variant="h5">최근등록</Typography>
+                            variant="h5">
+                  최근등록
+                </Typography>
                 <Link href="/search?q=최근">
                   <a>더보기</a>
                 </Link>
@@ -134,7 +149,9 @@ class Index extends React.Component {
                               items={recentEateryList}/>
               <div className={classes.titleWrapper}>
                 <Typography className={classes.title}
-                            variant="h5">모든음식점</Typography>
+                            variant="h5">
+                  모든음식점
+                </Typography>
                 <Link href="/search">
                   <a>더보기</a>
                 </Link>
