@@ -41,15 +41,23 @@ const EaterySchema = new Schema({
 });
 
 class EateryClass {
-  static async search({ q, size = 100 }) {
-    const sort = { name: 1, rating: -1 };
-    let regex = q;
-    if (regex.indexOf('최근') > -1) {
+  static async search({ q = '*', size = 100 }) {
+    const query = q.split('|');
+    const sort = {};
+    const recentIndex = query.indexOf('최근');
+    if (recentIndex > -1) {
       sort.createAt = 1;
+      query.splice(recentIndex, 1);
     }
-    if (regex.indexOf('추천') > -1) {
+    const recommendIndex = query.indexOf('추천');
+    if (recommendIndex > -1) {
       sort.rating = -1;
+      query.splice(recommendIndex, 1);
     }
+    if (!(sort.createAt && sort.rating)) {
+      sort.name = 1;
+    }
+    const regex = query.join('|');
     const results = await this.aggregate([
       {
         $match: {
@@ -85,6 +93,9 @@ class EateryClass {
           rating: { $avg: '$reviews.rating' },
           reviews: 1,
         },
+      },
+      {
+        $sort: sort,
       },
       {
         $limit: size,
