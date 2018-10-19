@@ -18,7 +18,8 @@ const styles = () => ({
   name: {
     color: '#000',
     fontWeight: '700',
-    '&:hover': {
+    '&:hover, &:focus': {
+      color: '#000',
       textDecoration: 'underline',
     },
   },

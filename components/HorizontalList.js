@@ -19,7 +19,8 @@ const styles = () => ({
   name: {
     color: '#000',
     fontWeight: '700',
-    '&:hover': {
+    '&:hover, &:focus': {
+      color: '#000',
       textDecoration: 'underline',
     },
   },
@@ -49,14 +50,13 @@ class HorizontalList extends React.Component {
   render() {
     const { className, classes, items } = this.props;
 
-    const listItem = (item) => {
+    const listItem = (item, index) => {
       const link = `/review?id=${item._id}`;
       const linkAs = `/review/${item._id}`;
       return (
         <Grid className={classes.listItem}
               item
-              key={item.tag}
-              spacing={8}
+              key={`${item.tag}-${index}`}
               xs={3}>
           <div className={classes.imageWrapper}>
             <Link as={linkAs}

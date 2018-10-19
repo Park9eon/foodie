@@ -6,9 +6,6 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography/Typography';
 
 const styles = () => ({
-  root: {
-    position: 'relative',
-  },
   imageWrapper: {
     width: '100%',
     height: '136px',
@@ -17,6 +14,12 @@ const styles = () => ({
     width: '100%',
     height: '100%',
     objectFit: 'cover',
+  },
+  listItemWrapper: {
+    position: 'relative',
+    '&:hover': {
+      opacity: '0.75',
+    },
   },
   textWrapper: {
     position: 'absolute',
@@ -56,7 +59,7 @@ class SummaryList extends React.Component {
             xs={4}>
         <Link href={`/search?q=${item.tag}`}>
           <a>
-            <div className={classes.root}>
+            <div className={classes.listItemWrapper}>
               <div className={classes.imageWrapper}>
                 <img className={classes.image}
                      src={item.image}

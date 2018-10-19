@@ -4,6 +4,7 @@ import { withRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Router from 'next/router';
 import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
 import { search, getTagList } from '../lib/api/eatery';
@@ -11,7 +12,7 @@ import Header from '../components/Header';
 import NavigationMenu from '../components/NavigationMenu';
 import VerticalList from '../components/VerticalList';
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     maxWidth: '1280px',
     width: '100%',
@@ -29,6 +30,8 @@ const styles = theme => ({
 
 class Search extends React.Component {
   static propTypes = {
+    router: PropTypes.shape()
+      .isRequired,
     classes: PropTypes.shape()
       .isRequired,
     user: PropTypes.shape()
@@ -39,48 +42,57 @@ class Search extends React.Component {
     eateryList: [],
     tags: [],
     query: [],
+    keyword: '',
   };
 
   constructor(props) {
     super(props);
 
     this.handleCheckbox = this.handleCheckbox.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   async componentDidMount() {
-    const { router: { query: { q } } } = this.props;
+    const { router: { query: { q, k } } } = this.props;
     const query = (q && q.split('|')) || [];
-
-    const eateryList = await search(q);
+    const eateryList = await this.getEateryList(q, k);
     const tags = await getTagList();
 
     this.setState({
       eateryList,
       tags,
       query,
+      keyword: k,
     });
   }
 
   async componentWillReceiveProps(nextProps) {
-    const { router: { query: { q } } } = nextProps;
-    const eateryList = await search(q);
+    const { router: { query: { q, k } } } = nextProps;
+    const query = (q && q.split('|')) || [];
+    const eateryList = await this.getEateryList(q, k);
     this.setState({
       eateryList,
+      query,
+      keyword: k,
     });
   }
 
-  handleCheckbox(id) {
-    let q = null;
-    if (id === -1) {
-      q = '최근';
-    } else if (id === -2) {
-      q = '추천';
+  async getEateryList(q, k) {
+    let queryString = '';
+    if (q && k) {
+      queryString = `${q}|${k}`;
+    } else if (q) {
+      queryString = q;
     } else {
-      q = this.state.tags[id];
+      queryString = k;
     }
-    const { query } = this.state;
-    const { router } = this.props;
+    const eateryList = await search(queryString);
+    return eateryList;
+  }
 
+  handleCheckbox(q) {
+    const { query, keyword } = this.state;
+    const { router } = this.props;
     const index = query.indexOf(q);
     if (index > -1) {
       query.splice(index, 1);
@@ -89,13 +101,30 @@ class Search extends React.Component {
     }
     return router.push({
       pathname: '/search',
-      query: { q: query.join('|') },
+      query: {
+        q: query.join('|'),
+        k: keyword,
+      },
+    });
+  }
+
+  handleSearch(k) {
+    this.setState({ keyword: k });
+    const { query } = this.state;
+    return Router.push({
+      pathname: '/search',
+      query: {
+        q: query.join('|'),
+        k,
+      },
     });
   }
 
   render() {
     const { user, classes } = this.props;
-    const { eateryList, tags, query } = this.state;
+    const {
+      eateryList, tags, query, keyword,
+    } = this.state;
     return (
       <div>
         <Head>
@@ -107,14 +136,15 @@ class Search extends React.Component {
                 spacing={16}>
             <Grid item
                   xs={3}>
-              <NavigationMenu onChange={this.handleCheckbox}
+              <NavigationMenu onCheck={this.handleCheckbox}
+                              onSearch={this.handleSearch}
                               query={query}
+                              keyword={keyword}
                               items={tags}/>
             </Grid>
             <Grid item
                   xs={9}>
-              <VerticalList
-                items={eateryList}/>
+              <VerticalList items={eateryList}/>
             </Grid>
           </Grid>
         </main>

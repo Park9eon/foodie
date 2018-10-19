@@ -105,7 +105,11 @@ class EateryClass {
   }
 
   static async tags() {
-    const results = await this.distinct('tags');
+    const results = await this.distinct('tags', {
+      tags: {
+        $not: /가성비|회식|점심|저녁|근사한|술/,
+      },
+    });
     return results;
   }
 
@@ -137,7 +141,7 @@ class EateryClass {
                 $expr: {
                   $and: [
                     {
-                      $eq: ['$_id', '$$a'],
+                      $eq: ['$_id|$$a'],
                     },
                   ],
                 },
