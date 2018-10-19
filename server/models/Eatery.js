@@ -12,9 +12,6 @@ const EaterySchema = new Schema({
   description: {
     type: String,
   },
-  address: {
-    type: String,
-  },
   location: {
     address: String, // 주소
     lng: Number, // 경도

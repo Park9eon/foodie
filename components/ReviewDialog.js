@@ -9,14 +9,13 @@ import DialogActions from '@material-ui/core/DialogActions';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
-import Chip from '@material-ui/core/Chip';
 import CloseIcon from '@material-ui/icons/Close';
 import ImageDialog from './ImageDialog';
 import Tags from './Tags';
 
 import { createEatery } from '../lib/api/eatery';
 
-class EditorDialog extends React.Component {
+class EateryDialog extends React.Component {
   static propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
@@ -73,7 +72,7 @@ class EditorDialog extends React.Component {
     return null;
   }
 
-  handleChange = name => (event) => {
+  handleChange = (name) => (event) => {
     const value = event.target.value;
     this.setState({
       [name]: value,
@@ -167,98 +166,79 @@ class EditorDialog extends React.Component {
 
   render() {
     return (
-      <Dialog
-        fullWidth
-        {...this.props}
-        aria-labelledby="edit-dialog-title"
-      >
+      <Dialog fullWidth
+              {...this.props}
+              aria-labelledby="edit-dialog-title">
         <DialogTitle id="edit-dialog-title">
           음식점 추가
         </DialogTitle>
         <DialogContent>
           <form>
-            <TextField
-              id="name"
-              label="이름"
-              error={this.state.nameError}
-              value={this.state.name}
-              onChange={this.handleChange('name')}
-              margin="normal"
-              fullWidth
-            />
-            <TextField
-              id="description"
-              label="설명"
-              multiline
-              rows="5"
-              value={this.state.description}
-              onChange={this.handleChange('description')}
-              margin="normal"
-              fullWidth
-            />
-            <TextField
-              id="tags"
-              label="태그"
-              onKeyPress={this.handleKeyPress}
-              value={this.state.tag}
-              onChange={this.handleChange('tag')}
-              inputProps={{ onBlur: this.addTag }}
-              margin="normal"
-              fullWidth
-            />
+            <TextField id="name"
+                       label="이름"
+                       error={this.state.nameError}
+                       value={this.state.name}
+                       onChange={this.handleChange('name')}
+                       margin="normal"
+                       fullWidth/>
+            <TextField id="description"
+                       label="설명"
+                       multiline
+                       rows="5"
+                       value={this.state.description}
+                       onChange={this.handleChange('description')}
+                       margin="normal"
+                       fullWidth/>
+            <TextField id="tags"
+                       label="태그"
+                       onKeyPress={this.handleKeyPress}
+                       value={this.state.tag}
+                       onChange={this.handleChange('tag')}
+                       inputProps={{ onBlur: this.addTag }}
+                       margin="normal"
+                       fullWidth/>
             <Tags onDelete={this.removeTag} tags={this.state.tags}/>
             <div>
-              <GridList
-                cellHeight={100}
-                cols={4}
-                style={{
-                  marginTop: '16px',
-                }}
-              >
+              <GridList cellHeight={100}
+                        cols={4}
+                        style={{
+                          marginTop: '16px',
+                        }}>
                 {this.state.images.map((image, index) => (
-                  <GridListTile
-                    key={index}
-                    cols={1}
-                  >
+                  <GridListTile key={index}
+                                cols={1}>
                     <div style={{
                       position: 'relative',
                       height: '100%',
-                    }}
-                    >
-                      <img
-                        src={typeof image === 'string' ? image : image.preview}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                        }}
-                      />
-                      <IconButton
-                        onClick={() => this.removeImage(index)}
-                        style={{
-                          color: '#eee',
-                          background: 'rgba(0, 0, 0, .8)',
-                          position: 'absolute',
-                          top: '50%',
-                          left: '50%',
-                          transform: 'translate(-50%, -50%)',
-                        }}
-                      >
-                        <CloseIcon fontSize="small" />
+                    }}>
+                      <img src={typeof image === 'string' ? image : image.preview}
+                           style={{
+                             width: '100%',
+                             height: '100%',
+                             objectFit: 'cover',
+                           }}/>
+                      <IconButton onClick={() => this.removeImage(index)}
+                                  style={{
+                                    color: '#eee',
+                                    background: 'rgba(0, 0, 0, .8)',
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%, -50%)',
+                                  }}>
+                        <CloseIcon fontSize="small"/>
                       </IconButton>
                     </div>
                   </GridListTile>
                 ))}
                 <GridListTile>
-                  <Button
-                    color="primary"
-                    variant="outlined"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                    }}
-                    onClick={this.onImgDialogOpen}
-                  >
+                  <Button color="primary"
+                          variant="outlined"
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                          }}
+                          onClick={this.onImgDialogOpen}>
                     이미지 추가
                   </Button>
                 </GridListTile>
@@ -267,26 +247,20 @@ class EditorDialog extends React.Component {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={this.props.onClose}
-            color="secondary"
-          >
+          <Button onClick={this.props.onClose}
+                  color="secondary">
             취소
           </Button>
-          <Button
-            onClick={() => this.save(this.props.onClose)}
-            color="primary"
-          >
+          <Button onClick={() => this.save(this.props.onClose)}
+                  color="primary">
             저장
           </Button>
         </DialogActions>
-        <ImageDialog
-          onClose={this.onImgDialogClose}
-          open={this.state.isImgDialogOpen}
-        />
+        <ImageDialog onClose={this.onImgDialogClose}
+                     open={this.state.isImgDialogOpen}/>
       </Dialog>
     );
   }
 }
 
-export default EditorDialog;
+export default EateryDialog;

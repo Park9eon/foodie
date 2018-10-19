@@ -5,7 +5,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
-import EditorDialog from '../components/EditorDialog';
+import EateryDialog from '../components/EditorDialog';
 import Map from '../components/GoogleMapWrapper';
 import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
@@ -86,10 +86,7 @@ class Index extends React.Component {
           </Grid>
         </Grid>
         {/* 추가 및 수정 dialog */}
-        <EditorDialog
-          onClose={this.onEditDialogClose}
-          open={this.state.isEditDialogOpen}
-        />
+
         {/* 자세히보기 dialog */}
       </div>
     );

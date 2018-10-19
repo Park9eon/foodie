@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import withAuth from '../lib/withAuth';
@@ -22,9 +23,11 @@ const styles = (theme) => ({
     marginTop: '48px',
     padding: theme.spacing.unit * 2,
   },
+  titleWrapper: {
+    marginBottom: theme.spacing.unit,
+  },
   title: {
     fontWeight: 700,
-    marginBottom: theme.spacing.unit,
   },
   section: {
     marginBottom: theme.spacing.unit * 2,
@@ -104,10 +107,21 @@ class Review extends React.Component {
             </Grid>
             <Grid item
                   xs={9}>
-              <Typography variant="h5"
-                          className={classes.title}>
-                {eatery.name}
-              </Typography>
+              <Grid container
+                    className={classes.titleWrapper}>
+                <Grid item
+                      sm>
+                  <Typography variant="h5"
+                              className={classes.title}>
+                    {eatery.name}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Button color="secondary">
+                    음식점 정보수정
+                  </Button>
+                </Grid>
+              </Grid>
               <div className={classes.section}>
                 <Grid container
                       spacing={8}>
@@ -129,10 +143,14 @@ class Review extends React.Component {
               <Grid container
                     spacing={8}>
                 <Grid item>
-                  <Typography variant="h5"
-                              className={classes.title}>
-                    사진
-                  </Typography>
+                  <Grid container>
+                    <div className={classes.titleWrapper}>
+                      <Typography variant="h5"
+                                  className={classes.title}>
+                        사진
+                      </Typography>
+                    </div>
+                  </Grid>
                 </Grid>
                 <Grid item>
                   <Typography variant="caption">{`사진 ${eatery.photos.length}개`}</Typography>
@@ -166,10 +184,21 @@ class Review extends React.Component {
                        src={eatery.photos[3] || '/static/img_default.png'}/>
                 </Grid>
               </Grid>
-              <Typography variant="h5"
-                          className={classes.title}>
-                리뷰
-              </Typography>
+              <Grid container
+                    className={classes.titleWrapper}>
+                <Grid item
+                      sm>
+                  <Typography variant="h5"
+                              className={classes.title}>
+                    리뷰
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Button color="primary">
+                    리뷰작성하기
+                  </Button>
+                </Grid>
+              </Grid>
               <div>
                 <ReviewList user={user}
                             items={eatery.reviews}/>
