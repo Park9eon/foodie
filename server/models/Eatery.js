@@ -36,6 +36,12 @@ const EaterySchema = new Schema({
       type: String,
       required: true,
     },
+    createdAt: {
+      type: Date,
+      required: true,
+      default: Date.now(),
+    },
+    images: [String],
   }],
   photos: [String],
 });
@@ -134,14 +140,14 @@ class EateryClass {
       {
         $lookup: {
           from: 'users',
-          let: { a: '$reviews.userId' },
+          let: { id: '$reviews.userId' },
           pipeline: [
             {
               $match: {
                 $expr: {
                   $and: [
                     {
-                      $eq: ['$_id|$$a'],
+                      $eq: ['$_id', '$$id'],
                     },
                   ],
                 },
@@ -164,7 +170,9 @@ class EateryClass {
           photos: 1,
           address: 1,
           tags: 1,
+          rating: { $avg: '$reviews.rating' },
           reviews: {
+            _id: 1,
             rating: 1,
             review: 1,
             user: {
@@ -181,6 +189,7 @@ class EateryClass {
           address: { $first: '$address' },
           photos: { $first: '$photos' },
           tags: { $first: '$tags' },
+          rating: { $first: '$rating' },
           reviews: { $push: '$reviews' },
         },
       },
@@ -209,6 +218,7 @@ class EateryClass {
                            _id,
                            rating,
                            review,
+                           images,
                            user,
                          }) {
     const result = await this.updateOne({ _id }, {
@@ -217,6 +227,7 @@ class EateryClass {
           userId: user._id,
           rating,
           review,
+          images,
         },
       },
     });
@@ -228,6 +239,7 @@ class EateryClass {
                             reviewId,
                             rating,
                             review,
+                            images,
                           }) {
     const result = await this.updateOne({
       _id,

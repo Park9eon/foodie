@@ -12,7 +12,6 @@ import Header from '../components/Header';
 import NavigationMenu from '../components/NavigationMenu';
 import Rating from '../components/Rating';
 import ReviewList from '../components/ReviewList';
-import { getRating } from '../lib/utlis';
 
 const styles = (theme) => ({
   root: {
@@ -23,11 +22,18 @@ const styles = (theme) => ({
     marginTop: '48px',
     padding: theme.spacing.unit * 2,
   },
+  title: {
+    fontWeight: 700,
+    marginBottom: theme.spacing.unit,
+  },
+  section: {
+    marginBottom: theme.spacing.unit * 2,
+  },
   imageWrapper: {
     height: '200px',
   },
   image: {
-    background: 'rgba(0, 0, 0, .1)',
+    background: 'rgb(200, 200, 200)',
     width: '100%',
     height: '100%',
     objectFit: 'cover',
@@ -51,13 +57,17 @@ class Review extends React.Component {
     return { id: query.id };
   }
 
-  constructor(props) {
-    super(props);
-    this.handleCheckbox = this.handleCheckbox.bind(this);
-  }
-
   state = {
-    eatery: {},
+    eatery: {
+      _id: null,
+      name: '',
+      description: '',
+      address: '',
+      rating: 0,
+      reviews: [],
+      images: [],
+      photos: [],
+    },
     tags: [],
   };
 
@@ -76,32 +86,13 @@ class Review extends React.Component {
     }
   }
 
-  handleCheckbox(id) {
-    let q = null;
-    if (id === -1) {
-      q = '최근';
-    } else if (id === -2) {
-      q = '추천';
-    } else {
-      q = this.state.tags[id];
-    }
-    return Router.push({
-      pathname: '/search',
-      query: { q },
-    });
-  }
-
   render() {
     const { user, classes } = this.props;
     const { eatery, tags } = this.state;
-    const rating = getRating(eatery);
     return (
       <div>
         <Head>
-          <title>
-            Mediex Foodie -
-            {eatery.name}
-          </title>
+          <title>{`Mediex Foodie - ${eatery.name}`}</title>
         </Head>
         <Header user={user}/>
         <main className={classes.root}>
@@ -111,57 +102,79 @@ class Review extends React.Component {
                   xs={3}>
               <NavigationMenu items={tags}/>
             </Grid>
-            {eatery.name && (
-              <Grid item
-                    xs={9}>
-                <div>
-                  <Typography variant="h4">
-                    {eatery.name}
-                  </Typography>
-                  <Rating value={rating}
-                          max={5}/>
-                  <div>
-                    {eatery.location && eatery.location.address
-                    && <span>{eatery.location.address}</span>}
-                    {eatery.tags && eatery.tags.length > 0 && <span>{eatery.tags.join(', ')}</span>}
-                    {eatery.description && <span>{eatery.description}</span>}
-                  </div>
-                  <Grid container
-                        spacing={8}>
-                    <Grid item
-                          xs={8}
-                          className={classes.imageWrapper}>
-                      <img className={classes.image}
-                           src={eatery.photos[0] || '/static/img_default.png'}/>
-                    </Grid>
-                    <Grid item
-                          xs={4}
-                          className={classes.imageWrapper}>
-                      <img className={classes.image}
-                           src={eatery.photos[1] || '/static/img_default.png'}/>
-                    </Grid>
-                    <Grid item
-                          xs={6}
-                          className={classes.imageWrapper}>
-                      <img className={classes.image}
-                           src={eatery.photos[2] || '/static/img_default.png'}/>
-                    </Grid>
-                    <Grid item
-                          xs={6}
-                          className={classes.imageWrapper}>
-                      <img className={classes.image}
-                           src={eatery.photos[3] || '/static/img_default.png'}/>
-                    </Grid>
+            <Grid item
+                  xs={9}>
+              <Typography variant="h5"
+                          className={classes.title}>
+                {eatery.name}
+              </Typography>
+              <div className={classes.section}>
+                <Grid container
+                      spacing={8}>
+                  <Grid item>
+                    <Rating value={eatery.rating}
+                            max={5}/>
                   </Grid>
-                </div>
-                <Typography variant="h4">리뷰</Typography>
+                  <Grid item>
+                    <Typography variant="caption">{`리뷰 ${eatery.reviews.length}개`}</Typography>
+                  </Grid>
+                </Grid>
                 <div>
-                  <ReviewList id={eatery._id}
-                              user={user}
-                              items={eatery.reviews}/>
+                  {eatery.location && eatery.location.address
+                  && <span>{eatery.location.address}</span>}
+                  {eatery.tags && eatery.tags.length > 0 && <span>{eatery.tags.join(', ')}</span>}
+                  {eatery.description && <span>{eatery.description}</span>}
                 </div>
+              </div>
+              <Grid container
+                    spacing={8}>
+                <Grid item>
+                  <Typography variant="h5"
+                              className={classes.title}>
+                    사진
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography variant="caption">{`사진 ${eatery.photos.length}개`}</Typography>
+                </Grid>
               </Grid>
-            )}
+              <Grid container
+                    spacing={8}
+                    className={classes.section}>
+                <Grid item
+                      xs={8}
+                      className={classes.imageWrapper}>
+                  <img className={classes.image}
+                       src={eatery.photos[0] || '/static/img_default.png'}/>
+                </Grid>
+                <Grid item
+                      xs={4}
+                      className={classes.imageWrapper}>
+                  <img className={classes.image}
+                       src={eatery.photos[1] || '/static/img_default.png'}/>
+                </Grid>
+                <Grid item
+                      xs={6}
+                      className={classes.imageWrapper}>
+                  <img className={classes.image}
+                       src={eatery.photos[2] || '/static/img_default.png'}/>
+                </Grid>
+                <Grid item
+                      xs={6}
+                      className={classes.imageWrapper}>
+                  <img className={classes.image}
+                       src={eatery.photos[3] || '/static/img_default.png'}/>
+                </Grid>
+              </Grid>
+              <Typography variant="h5"
+                          className={classes.title}>
+                리뷰
+              </Typography>
+              <div>
+                <ReviewList user={user}
+                            items={eatery.reviews}/>
+              </div>
+            </Grid>
           </Grid>
         </main>
       </div>

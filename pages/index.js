@@ -57,10 +57,6 @@ class Index extends React.Component {
       .isRequired,
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   state = {
     eateryList: [],
     recommendEateryList: [],

@@ -7,7 +7,7 @@ module.exports = {
   },
   plugins: ['react', 'jsx-a11y', 'import'],
   rules: {
-    'arrow-parens': ["error", "always"],
+    'arrow-parens': ['error', 'always'],
     'max-len': ['error', 100],
     'no-underscore-dangle': ['error', { allow: ['_id'] }],
     'no-mixed-operators': 'off',
@@ -39,6 +39,7 @@ module.exports = {
     'react/jsx-indent-props': ['error', 'first'],
     'react/react-in-jsx-scope': 'off',
     'react/prefer-stateless-function': [0],
+    'react/jsx-one-expression-per-line': [2, { 'allow': 'single-child' }],
     'react/jsx-closing-bracket-location': [1, 'after-props'],
     'react/jsx-filename-extension': [
       'error',
