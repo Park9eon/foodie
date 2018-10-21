@@ -4,7 +4,7 @@ import Chip from '@material-ui/core/Chip/Chip';
 import { withStyles } from '@material-ui/core/styles';
 import { yellow, green } from '@material-ui/core/colors';
 
-const styles = theme => ({
+const styles = (theme) => ({
   tags: {
     margin: theme.spacing.unit * -0.5,
   },
@@ -28,36 +28,24 @@ class Tags extends React.Component {
       .isRequired,
     tags: PropTypes.arrayOf(PropTypes.string),
     onDelete: PropTypes.func,
-    isRecent: PropTypes.bool,
-    isRecommend: PropTypes.bool,
   };
 
   static defaultProps = {
     tags: [],
     onDelete: null,
-    isRecent: null,
-    isRecommend: null,
   };
 
   render() {
-    const { classes, tags, onDelete, isRecent, isRecommend } = this.props;
+    const {
+      classes, tags, onDelete,
+    } = this.props;
     return (
       <div className={classes.tags}>
-        {isRecent && <Chip
-          label="신규"
-          className={classes.recent}
-        />}
-        {isRecommend && <Chip
-          label="추천"
-          className={classes.recommend}
-        />}
         {tags.map((tag, index) => (
-          <Chip
-            key={index}
-            label={tag}
-            className={classes.tag}
-            onDelete={onDelete && (() => onDelete(index))}
-          />
+          <Chip key={tag}
+                label={tag}
+                className={classes.tag}
+                onDelete={onDelete && (() => onDelete(index))}/>
         ))}
       </div>
     );
