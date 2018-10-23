@@ -12,11 +12,9 @@ const EaterySchema = new Schema({
   description: {
     type: String,
   },
-  location: {
-    address: String, // 주소
-    lng: Number, // 경도
-    lat: Number, // 위도
-  },
+  address: String, // 주소
+  lng: Number, // 경도
+  lat: Number, // 위도
   tags: [String],
   createdAt: {
     type: Date,
@@ -40,7 +38,6 @@ const EaterySchema = new Schema({
     },
     images: [String],
   }],
-  photos: [String],
 });
 
 class EateryClass {
@@ -49,7 +46,7 @@ class EateryClass {
     const sort = {};
     const recentIndex = query.indexOf('최근');
     if (recentIndex > -1) {
-      sort.createAt = 1;
+      sort.createdAt = -1;
       query.splice(recentIndex, 1);
     }
     const recommendIndex = query.indexOf('추천');
@@ -57,7 +54,7 @@ class EateryClass {
       sort.rating = -1;
       query.splice(recommendIndex, 1);
     }
-    if (!(sort.createAt && sort.rating)) {
+    if (!(sort.createdAt && sort.rating)) {
       sort.name = 1;
     }
     const regex = query.join('|');
@@ -89,12 +86,9 @@ class EateryClass {
       {
         $project: {
           name: 1,
-          description: 1,
-          photos: 1,
-          address: 1,
           tags: 1,
+          createdAt: 1,
           rating: { $avg: '$reviews.rating' },
-          reviews: 1,
         },
       },
       {
@@ -102,6 +96,11 @@ class EateryClass {
       },
       {
         $limit: size,
+      },
+      {
+        $project: {
+          createdAt: 0,
+        },
       },
     ]);
     return results;
@@ -113,11 +112,6 @@ class EateryClass {
         $not: /가성비|회식|점심|저녁|근사한|술/,
       },
     });
-    return results;
-  }
-
-  static async list() {
-    const results = await this.find({});
     return results;
   }
 
@@ -137,46 +131,13 @@ class EateryClass {
       {
         $lookup: {
           from: 'users',
-          let: { id: '$reviews.userId' },
-          pipeline: [
-            {
-              $match: {
-                $expr: {
-                  $and: [
-                    {
-                      $eq: ['$_id', '$$id'],
-                    },
-                  ],
-                },
-              },
-            },
-            {
-              $project: {
-                displayName: 1,
-                avatarUrl: 1,
-              },
-            },
-          ],
+          localField: 'reviews.userId',
+          foreignField: '_id',
           as: 'reviews.user',
         },
       },
       {
-        $project: {
-          name: 1,
-          description: 1,
-          photos: 1,
-          address: 1,
-          tags: 1,
-          rating: { $avg: '$reviews.rating' },
-          reviews: {
-            _id: 1,
-            rating: 1,
-            review: 1,
-            user: {
-              $arrayElemAt: ['$reviews.user', 0],
-            },
-          },
-        },
+        $unwind: '$reviews.user',
       },
       {
         $group: {
@@ -184,10 +145,31 @@ class EateryClass {
           name: { $first: '$name' },
           description: { $first: '$description' },
           address: { $first: '$address' },
-          photos: { $first: '$photos' },
+          lat: { $first: '$lat' },
+          lng: { $first: '$lng' },
           tags: { $first: '$tags' },
           rating: { $first: '$rating' },
           reviews: { $push: '$reviews' },
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          description: 1,
+          address: 1,
+          lat: 1,
+          lng: 1,
+          tags: 1,
+          rating: { $avg: '$reviews.rating' },
+          reviews: {
+            rating: 1,
+            review: 1,
+            user: {
+              displayName: 1,
+              avatarUrl: 1,
+            },
+          },
+          images: [],
         },
       },
     ]);
@@ -196,18 +178,51 @@ class EateryClass {
 
   static async add({
                      name,
+                     description,
                      address,
-                     location,
-                     photos,
+                     lat,
+                     lng,
                      tags,
                    }) {
     const result = await this.create({
       name,
+      description,
       address,
-      location,
+      lat,
+      lng,
       tags,
-      photos,
     });
+    return result;
+  }
+
+
+  static async edit({
+                      id,
+                      name,
+                      description,
+                      address,
+                      lat,
+                      lng,
+                      tags,
+                    }) {
+    const result = await this.updateOne(
+      { _id: id },
+      {
+        $set: {
+          name,
+          description,
+          address,
+          lat,
+          lng,
+          tags,
+        },
+      },
+    );
+    return result;
+  }
+
+  static async del(id) {
+    const result = await this.deleteOne({ _id: id });
     return result;
   }
 
@@ -246,36 +261,10 @@ class EateryClass {
         'reviews.$': {
           rating,
           review,
+          images,
         },
       },
     });
-    return result;
-  }
-
-  static async edit(id, {
-    name,
-    address,
-    location,
-    tags,
-    photos,
-  }) {
-    const result = await this.updateOne(
-      { _id: id },
-      {
-        $set: {
-          name,
-          address,
-          location,
-          tags,
-          photos,
-        },
-      },
-    );
-    return result;
-  }
-
-  static async del(id) {
-    const result = await this.deleteOne({ _id: id });
     return result;
   }
 }

@@ -6,6 +6,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import LocationIcon from '@material-ui/icons/LocationOn';
+import DescriptionIcon from '@material-ui/icons/Description';
 import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
 import { getEatery, getTagList } from '../lib/api/eatery';
@@ -13,6 +15,8 @@ import Header from '../components/Header';
 import NavigationMenu from '../components/NavigationMenu';
 import Rating from '../components/Rating';
 import ReviewList from '../components/ReviewList';
+import EateryDialog from '../components/EateryDialog';
+import Tags from '../components/Tags';
 
 const styles = (theme) => ({
   root: {
@@ -66,13 +70,21 @@ class Review extends React.Component {
       name: '',
       description: '',
       address: '',
+      lat: null,
+      let: null,
       rating: 0,
       reviews: [],
       images: [],
-      photos: [],
     },
     tags: [],
+    dialogOpen: false,
   };
+
+  constructor(props) {
+    super(props);
+    this.handleDialogOpen = this.handleDialogOpen.bind(this);
+    this.handleDialogClose = this.handleDialogClose.bind(this);
+  }
 
   async componentDidMount() {
     const { id } = this.props;
@@ -89,9 +101,17 @@ class Review extends React.Component {
     }
   }
 
+  handleDialogOpen() {
+    this.setState({ dialogOpen: true });
+  }
+
+  handleDialogClose() {
+    this.setState({ dialogOpen: false });
+  }
+
   render() {
     const { user, classes } = this.props;
-    const { eatery, tags } = this.state;
+    const { eatery, tags, dialogOpen } = this.state;
     return (
       <div>
         <Head>
@@ -117,7 +137,8 @@ class Review extends React.Component {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Button color="secondary">
+                  <Button color="secondary"
+                          onClick={this.handleDialogOpen}>
                     음식점 정보수정
                   </Button>
                 </Grid>
@@ -134,10 +155,36 @@ class Review extends React.Component {
                   </Grid>
                 </Grid>
                 <div>
-                  {eatery.location && eatery.location.address
-                  && <span>{eatery.location.address}</span>}
-                  {eatery.tags && eatery.tags.length > 0 && <span>{eatery.tags.join(', ')}</span>}
-                  {eatery.description && <span>{eatery.description}</span>}
+                  {eatery.tags && eatery.tags.length > 0
+                  && (
+                    <Tags tags={eatery.tags}/>
+                  )}
+                  {eatery.address && (
+                    <p>
+                      <Grid container
+                            spacing={8}>
+                        <Grid item>
+                          <LocationIcon fontSize="small"/>
+                        </Grid>
+                        <Grid item
+                              sm>
+                          {eatery.address}
+                        </Grid>
+                      </Grid>
+                    </p>
+                  )}
+                  {eatery.description && (
+                    <Grid container
+                          spacing={8}>
+                      <Grid item>
+                        <DescriptionIcon fontSize="small"/>
+                      </Grid>
+                      <Grid item
+                            sm>
+                        {eatery.description}
+                      </Grid>
+                    </Grid>
+                  )}
                 </div>
               </div>
               <Grid container
@@ -153,7 +200,7 @@ class Review extends React.Component {
                   </Grid>
                 </Grid>
                 <Grid item>
-                  <Typography variant="caption">{`사진 ${eatery.photos.length}개`}</Typography>
+                  <Typography variant="caption">{`사진 ${eatery.images.length}개`}</Typography>
                 </Grid>
               </Grid>
               <Grid container
@@ -163,25 +210,25 @@ class Review extends React.Component {
                       xs={8}
                       className={classes.imageWrapper}>
                   <img className={classes.image}
-                       src={eatery.photos[0] || '/static/img_default.png'}/>
+                       src={eatery.images[0] || '/static/img_default.png'}/>
                 </Grid>
                 <Grid item
                       xs={4}
                       className={classes.imageWrapper}>
                   <img className={classes.image}
-                       src={eatery.photos[1] || '/static/img_default.png'}/>
+                       src={eatery.images[1] || '/static/img_default.png'}/>
                 </Grid>
                 <Grid item
                       xs={6}
                       className={classes.imageWrapper}>
                   <img className={classes.image}
-                       src={eatery.photos[2] || '/static/img_default.png'}/>
+                       src={eatery.images[2] || '/static/img_default.png'}/>
                 </Grid>
                 <Grid item
                       xs={6}
                       className={classes.imageWrapper}>
                   <img className={classes.image}
-                       src={eatery.photos[3] || '/static/img_default.png'}/>
+                       src={eatery.images[3] || '/static/img_default.png'}/>
                 </Grid>
               </Grid>
               <Grid container
@@ -206,6 +253,9 @@ class Review extends React.Component {
             </Grid>
           </Grid>
         </main>
+        <EateryDialog onClose={this.handleDialogClose}
+                      open={dialogOpen}
+                      {...eatery}/>
       </div>
     );
   }

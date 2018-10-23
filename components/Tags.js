@@ -42,7 +42,7 @@ class Tags extends React.Component {
     return (
       <div className={classes.tags}>
         {tags.map((tag, index) => (
-          <Chip key={tag}
+          <Chip key={index}
                 label={tag}
                 className={classes.tag}
                 onDelete={onDelete && (() => onDelete(index))}/>

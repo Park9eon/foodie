@@ -52,7 +52,8 @@ function api(server) {
     const { q, size } = req.query;
     try {
       const results = await Eatery.search({
-        q, size: parseFloat(size),
+        q,
+        size: parseFloat(size),
       });
       res.json(results);
     } catch (err) {
@@ -60,20 +61,10 @@ function api(server) {
     }
   });
   // 음식점 등록
-  router.post('/', authorization(), upload.array('images', 12), async (req, res) => {
+  router.post('/', authorization(), async ({ body }, res) => {
     try {
-      const {
-        name, description, tags, imageUrls,
-      } = req.body;
-      const photos = req.files.map(file => path.join('static', 'upload', file.filename))
-        .concat(imageUrls || []);
-      const result = await Eatery.add({
-        name,
-        description,
-        tags,
-        photos,
-      });
-      res.json(result);
+      const result = await Eatery.add(body);
+      res.json(201, result);
     } catch (err) {
       res.json({ error: err.message || err.toString() });
     }
@@ -119,9 +110,28 @@ function api(server) {
     }
   });
   // 음식점 수정
-  router.put('/:id', authorization(), async (req, res) => {
+  router.put('/:id', authorization(), async (
+    {
+      params: { id },
+      body: {
+        name,
+        description,
+        address,
+        lat,
+        lng,
+        tags,
+      },
+    }, res) => {
     try {
-      const result = await Eatery.edit(req.params.id, req.body);
+      const result = await Eatery.edit({
+        id,
+        name,
+        description,
+        address,
+        lat,
+        lng,
+        tags,
+      });
       res.json(result);
     } catch (err) {
       res.json({ error: err.message || err.toString() });
@@ -139,7 +149,7 @@ function api(server) {
         review,
         user,
       });
-      res.json(result);
+      res.json(201, result);
     } catch (err) {
       res.json({ error: err.message || err.toString() });
     }

@@ -84,7 +84,8 @@ class ReviewList extends React.Component {
     return (
       <Grid container
             spacing={16}>
-        {items.map(listItem)}
+        {items.filter((item) => item.review)
+          .map(listItem)}
       </Grid>
     );
   }

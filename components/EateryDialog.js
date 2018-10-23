@@ -8,12 +8,29 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Tags from './Tags';
-import { createEatery } from '../lib/api/eatery';
+import { createEatery, updateEatery } from '../lib/api/eatery';
 
 class EateryDialog extends React.Component {
   static propTypes = {
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    description: PropTypes.string,
+    address: PropTypes.string,
+    lat: PropTypes.number,
+    let: PropTypes.number,
+    tags: PropTypes.arrayOf(PropTypes.string),
+  };
+
+  static defaultProps = {
+    _id: null,
+    name: null,
+    description: null,
+    address: null,
+    let: null,
+    lat: null,
+    tags: null,
   };
 
   constructor(props) {
@@ -34,13 +51,19 @@ class EateryDialog extends React.Component {
     nameError: false,
     tag: '',
     description: '',
-    location: {
-      address: '',
-      let: '',
-      lat: '',
-    },
+    address: '',
+    lng: '',
+    lat: '',
     tags: [],
   };
+
+  componentDidMount() {
+    this.setStateByProps(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setStateByProps(nextProps);
+  }
 
   getSplitter(value) {
     if (value.includes(',')) {
@@ -52,17 +75,25 @@ class EateryDialog extends React.Component {
     return null;
   }
 
+  setStateByProps({
+    name, description, address, lng, lat, tags,
+  }) {
+    this.setState({
+      name: name || '',
+      description: description || '',
+      address: address || '',
+      lng: lng || '',
+      lat: lat || '',
+      tags: tags || [],
+    });
+  }
+
   handleChange = (name) => (event) => {
     const { value } = event.target;
-    const { tags, location } = this.state;
-    if (name === 'lat' || name === 'let' || name === 'address') {
-      location[name] = value;
-      this.setState({ location });
-    } else {
-      this.setState({
-        [name]: value,
-      });
-    }
+    const { tags } = this.state;
+    this.setState({
+      [name]: value,
+    });
     if (name === 'tag' && value !== '') {
       const splitter = this.getSplitter(value);
       if (splitter) {
@@ -114,34 +145,47 @@ class EateryDialog extends React.Component {
     this.setState({ images });
   }
 
-  async save() {
+  async save(callback) {
     try {
+      const { _id } = this.props;
       const {
-        name, description, location, tags,
+        name, description, tags, address, lat, lng,
       } = this.state;
-      const data = new FormData();
-      if (!name) {
+      const data = {};
+      if (name) {
+        data.name = name;
+      } else {
         this.setState({ nameError: true });
         throw new Error('이름을 입력해주세요.');
       }
-      data.append('name', name);
       if (description) {
-        data.append('description', description);
+        data.description = description;
       }
-      if (tags.length > 0) {
-        tags.forEach((tag) => {
-          data.append('tags', tag);
-        });
+      if (tags) {
+        data.tags = tags;
       }
-      await createEatery(data);
+      if (address) {
+        data.address = address;
+      }
+      if (lat) {
+        data.lat = Number.parseInt(lat, 10);
+      }
+      if (lng) {
+        data.lng = Number.parseInt(lng, 10);
+      }
+      if (_id) {
+        await updateEatery(_id, data);
+      } else {
+        await createEatery(data);
+      }
     } catch (err) {
-      console.log(err);
+      callback(false);
     }
   }
 
   render() {
     const {
-      name, nameError, description, tag, tags, location,
+      name, nameError, description, tag, tags, address, lng, lat,
     } = this.state;
     const { onClose } = this.props;
     return (
@@ -154,39 +198,43 @@ class EateryDialog extends React.Component {
         <DialogContent>
           <form>
             <TextField id="name"
-                       label="이름"
+                       label="이름 (필수)"
                        error={nameError}
                        value={name}
                        onChange={this.handleChange('name')}
                        margin="normal"
                        fullWidth/>
             <TextField id="description"
-                       label="설명"
+                       label="설명 (선택)"
                        multiline
+                       helperText="여러줄 입력가능합니다."
                        value={description}
                        onChange={this.handleChange('description')}
                        margin="normal"
                        fullWidth/>
-            <TextField label="주소"
+            <TextField label="주소 (선택)"
                        onKeyPress={this.handleKeyPress}
-                       value={location.address}
+                       value={address}
                        onChange={this.handleChange('address')}
                        margin="normal"
                        fullWidth/>
-            <Grid container spacing={8}>
-              <Grid item xs={6}>
-                <TextField label="위도"
+            <Grid container
+                  spacing={8}>
+              <Grid item
+                    xs={6}>
+                <TextField label="위도 (선택)"
                            onKeyPress={this.handleKeyPress}
-                           value={location.let}
+                           value={lng}
                            type="number"
                            margin="normal"
-                           onChange={this.handleChange('let')}
+                           onChange={this.handleChange('lng')}
                            fullWidth/>
               </Grid>
-              <Grid item xs={6}>
-                <TextField label="경도"
+              <Grid item
+                    xs={6}>
+                <TextField label="경도 (선택)"
                            onKeyPress={this.handleKeyPress}
-                           value={location.lat}
+                           value={lat}
                            type="number"
                            margin="normal"
                            onChange={this.handleChange('lat')}
@@ -194,7 +242,7 @@ class EateryDialog extends React.Component {
               </Grid>
             </Grid>
             <TextField id="tags"
-                       label="태그"
+                       label="태그 (권장)"
                        onKeyPress={this.handleKeyPress}
                        value={tag}
                        onChange={this.handleChange('tag')}
@@ -208,10 +256,12 @@ class EateryDialog extends React.Component {
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}
-                  color="secondary">
+                  color="secondary"
+                  variant="outlined">
             취소
           </Button>
           <Button onClick={() => this.save(onClose)}
+                  variant="contained"
                   color="primary">
             저장
           </Button>

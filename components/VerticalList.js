@@ -66,7 +66,7 @@ class VerticalList extends React.Component {
                   href={link}>
               <a>
                 <img className={classes.image}
-                     src={item.photos[0] || '/static/img_default.png'}
+                     src={'/static/img_default.png'}
                      alt={item.name}/>
               </a>
             </Link>

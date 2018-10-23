@@ -115,7 +115,6 @@ class NavigationMenu extends React.Component {
     this.setState({ dialogOpen: true });
   }
 
-
   handleDialogClose() {
     this.setState({ dialogOpen: false });
   }
