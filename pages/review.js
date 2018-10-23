@@ -16,6 +16,7 @@ import NavigationMenu from '../components/NavigationMenu';
 import Rating from '../components/Rating';
 import ReviewList from '../components/ReviewList';
 import EateryDialog from '../components/EateryDialog';
+import ReviewDialog from '../components/ReviewDialog';
 import Tags from '../components/Tags';
 
 const styles = (theme) => ({
@@ -77,13 +78,15 @@ class Review extends React.Component {
       images: [],
     },
     tags: [],
-    dialogOpen: false,
+    eateryDialogOpen: false,
+    reviewDialogOpen: false,
   };
 
   constructor(props) {
     super(props);
     this.handleDialogOpen = this.handleDialogOpen.bind(this);
     this.handleDialogClose = this.handleDialogClose.bind(this);
+    this.handleReview = this.handleReview.bind(this);
   }
 
   async componentDidMount() {
@@ -101,17 +104,26 @@ class Review extends React.Component {
     }
   }
 
-  handleDialogOpen() {
-    this.setState({ dialogOpen: true });
+  handleDialogOpen(name) {
+    return () => {
+      this.setState({ [name]: true });
+    };
   }
 
-  handleDialogClose() {
-    this.setState({ dialogOpen: false });
+  handleDialogClose(name) {
+    return () => {
+      this.setState({ [name]: false });
+      console.log(name, this.state);
+    };
+  }
+
+  handleReview(result) {
+    console.log(result);
   }
 
   render() {
     const { user, classes } = this.props;
-    const { eatery, tags, dialogOpen } = this.state;
+    const { eatery, tags, eateryDialogOpen, reviewDialogOpen } = this.state;
     return (
       <div>
         <Head>
@@ -138,7 +150,7 @@ class Review extends React.Component {
                 </Grid>
                 <Grid item>
                   <Button color="secondary"
-                          onClick={this.handleDialogOpen}>
+                          onClick={this.handleDialogOpen('eateryDialogOpen')}>
                     음식점 정보수정
                   </Button>
                 </Grid>
@@ -160,18 +172,16 @@ class Review extends React.Component {
                     <Tags tags={eatery.tags}/>
                   )}
                   {eatery.address && (
-                    <p>
-                      <Grid container
-                            spacing={8}>
-                        <Grid item>
-                          <LocationIcon fontSize="small"/>
-                        </Grid>
-                        <Grid item
-                              sm>
-                          {eatery.address}
-                        </Grid>
+                    <Grid container
+                          spacing={8}>
+                      <Grid item>
+                        <LocationIcon fontSize="small"/>
                       </Grid>
-                    </p>
+                      <Grid item
+                            sm>
+                        {eatery.address}
+                      </Grid>
+                    </Grid>
                   )}
                   {eatery.description && (
                     <Grid container
@@ -241,21 +251,25 @@ class Review extends React.Component {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Button color="primary">
+                  <Button color="primary"
+                          onClick={this.handleDialogOpen('reviewDialogOpen')}>
                     리뷰작성하기
                   </Button>
                 </Grid>
               </Grid>
               <div>
                 <ReviewList user={user}
+                            onClick={this.handleReview}
                             items={eatery.reviews}/>
               </div>
             </Grid>
           </Grid>
         </main>
-        <EateryDialog onClose={this.handleDialogClose}
-                      open={dialogOpen}
+        <EateryDialog onClose={this.handleDialogClose('eateryDialogOpen')}
+                      open={eateryDialogOpen}
                       {...eatery}/>
+        <ReviewDialog onClose={this.handleDialogClose('reviewDialogOpen')}
+                      open={reviewDialogOpen}/>
       </div>
     );
   }

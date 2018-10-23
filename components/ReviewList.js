@@ -15,38 +15,15 @@ class ReviewList extends React.Component {
       .isRequired,
     user: PropTypes.shape()
       .isRequired,
+    onClick: PropTypes.func,
   };
 
-  //
-  // async handleSubmit() {
-  //   try {
-  //     const { id, user } = this.props;
-  //     const { rating, review, items } = this.state;
-  //     if (!(rating || review)) {
-  //       throw new Error('별점 혹은 리뷰중 하나를 넣어주세요.');
-  //     }
-  //     await addReview(id, {
-  //       rating,
-  //       review,
-  //     });
-  //     items.push({
-  //       rating,
-  //       review,
-  //       user,
-  //     });
-  //     this.setState({
-  //       items,
-  //       rating: null,
-  //       review: '',
-  //     });
-  //     Router.push(`/review?id=${id}`, `/review/${id}`);
-  //   } catch (err) {
-  //     this.handleError(err.message || err.error);
-  //   }
-  // }
+  static defaultProps = {
+    onClick: null,
+  };
 
   render() {
-    const { user, items } = this.props;
+    const { user, items, onClick } = this.props;
     const listItem = (item) => (
       <Grid item
             key={item._id}
@@ -71,10 +48,10 @@ class ReviewList extends React.Component {
         {item.user && user._id === item.user._id
         && (
           <Grid item>
-            <IconButton>
+            <IconButton onClick={() => onClick && onClick({ _id: item._id, event: 'edit' })}>
               <EditIcon fontSize="small"/>
             </IconButton>
-            <IconButton>
+            <IconButton onClick={() => onClick && onClick({ _id: item._id, event: 'delete' })}>
               <DeleteIcon fontSize="small"/>
             </IconButton>
           </Grid>

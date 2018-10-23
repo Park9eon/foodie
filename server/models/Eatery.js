@@ -162,9 +162,11 @@ class EateryClass {
           tags: 1,
           rating: { $avg: '$reviews.rating' },
           reviews: {
+            _id: 1,
             rating: 1,
             review: 1,
             user: {
+              _id: 1,
               displayName: 1,
               avatarUrl: 1,
             },

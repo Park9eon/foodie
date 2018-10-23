@@ -138,11 +138,13 @@ function api(server) {
     }
   });
   // 음식점 리뷰 추가
-  router.post('/:id/review', authorization(), async (req, res) => {
+  router.post('/:id/review', authorization(), upload.array('images'), async (req, res) => {
     try {
       const { rating, review } = req.body;
       const _id = req.params.id;
       const user = req.user;
+      const photos = req.files.map(file => path.join('static', 'upload', file.filename))
+        .concat(imageUrls || []);
       const result = await Eatery.addReview({
         _id,
         rating,

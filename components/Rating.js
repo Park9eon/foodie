@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 
-const styles = (theme) => ({});
+const styles = () => ({});
 
 class Rating extends React.Component {
   static propTypes = {
@@ -18,7 +18,7 @@ class Rating extends React.Component {
   };
 
   static defaultProps = {
-    rating: 0,
+    value: null,
     onChange: null,
     fontSize: 'default',
   };
@@ -29,7 +29,7 @@ class Rating extends React.Component {
     } = this.props;
     const rating = Array.from(Array(max), (_, index) => (index < value ? 1 : 0));
     return (
-      <div>
+      <div className={classes.root}>
         {rating.map((on, key) => (on
           ? (
             <StarIcon color="primary"

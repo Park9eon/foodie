@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import TextField from '@material-ui/core/TextField';
@@ -192,9 +191,6 @@ class EateryDialog extends React.Component {
       <Dialog fullWidth
               {...this.props}
               aria-labelledby="edit-dialog-title">
-        <DialogTitle id="edit-dialog-title">
-          음식점 추가
-        </DialogTitle>
         <DialogContent>
           <form>
             <TextField id="name"
