@@ -2,9 +2,9 @@ import React from 'react';
 import Head from 'next/head';
 import { withRouter } from 'next/router';
 import PropTypes from 'prop-types';
+import Hidden from '@material-ui/core/Hidden';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Router from 'next/router';
 import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
 import { search, getTagList } from '../lib/api/eatery';
@@ -135,15 +135,18 @@ class Search extends React.Component {
           <Grid container
                 spacing={16}>
             <Grid item
-                  xs={3}>
-              <NavigationMenu onCheck={this.handleCheckbox}
-                              onSearch={this.handleSearch}
-                              query={query}
-                              keyword={keyword}
-                              items={tags}/>
+                  md={3}>
+              <Hidden smDown>
+                <NavigationMenu onCheck={this.handleCheckbox}
+                                onSearch={this.handleSearch}
+                                query={query}
+                                keyword={keyword}
+                                items={tags}/>
+              </Hidden>
             </Grid>
             <Grid item
-                  xs={9}>
+                  sm={12}
+                  md={9}>
               <VerticalList items={eateryList}/>
             </Grid>
           </Grid>

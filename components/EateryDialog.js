@@ -174,10 +174,11 @@ class EateryDialog extends React.Component {
       }
       if (_id) {
         await updateEatery(_id, data);
+        callback(true);
       } else {
-        await createEatery(data);
+        const result = await createEatery(data);
+        callback(result);
       }
-      callback(true);
     } catch (err) {
       callback(false);
     }

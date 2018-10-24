@@ -58,7 +58,9 @@ class HorizontalList extends React.Component {
         <Grid className={classes.listItem}
               item
               key={`${item.tag}-${index}`}
-              xs={3}>
+              xs={6}
+              sm={4}
+              md={3}>
           <div className={classes.imageWrapper}>
             <Link as={linkAs}
                   href={link}>

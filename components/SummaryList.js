@@ -56,7 +56,9 @@ class SummaryList extends React.Component {
     const listItem = (item) => (
       <Grid item
             key={item.tag}
-            xs={4}>
+            xs={6}
+            sm={4}
+            md={4}>
         <Link href={`/search?q=${item.tag}`}>
           <a>
             <div className={classes.listItemWrapper}>

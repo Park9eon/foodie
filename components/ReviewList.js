@@ -37,7 +37,7 @@ class ReviewList extends React.Component {
           </Avatar>
         </Grid>
         <Grid item
-              sm>
+              xs>
           <Typography variant="h6">{item.user.displayName}</Typography>
           <Rating value={item.rating}
                   max={5}/>

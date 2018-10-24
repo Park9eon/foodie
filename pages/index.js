@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
 import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
@@ -95,13 +96,14 @@ class Index extends React.Component {
           <Grid container
                 spacing={16}>
             <Grid item
-                  xs={3}>
-              <div className={classes.navigationWrapper}>
+                  md={3}>
+              <Hidden smDown>
                 <NavigationMenu items={tags}/>
-              </div>
+              </Hidden>
             </Grid>
             <Grid item
-                  xs={9}>
+                  sm={12}
+                  md={9}>
               <div className={classes.titleWrapper}>
                 <Typography className={classes.title}
                             variant="h5">

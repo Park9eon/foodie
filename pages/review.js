@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Hidden from '@material-ui/core/Hidden';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -158,15 +159,18 @@ class Review extends React.Component {
           <Grid container
                 spacing={16}>
             <Grid item
-                  xs={3}>
-              <NavigationMenu items={tags}/>
+                  md={3}>
+              <Hidden smDown>
+                <NavigationMenu items={tags}/>
+              </Hidden>
             </Grid>
             <Grid item
-                  xs={9}>
+                  sm={12}
+                  md={9}>
               <Grid container
                     className={classes.titleWrapper}>
                 <Grid item
-                      sm>
+                      xs>
                   <Typography variant="h5"
                               className={classes.title}>
                     {eatery.name}
@@ -202,7 +206,7 @@ class Review extends React.Component {
                         <LocationIcon fontSize="small"/>
                       </Grid>
                       <Grid item
-                            sm>
+                            xs>
                         {eatery.address}
                       </Grid>
                     </Grid>
@@ -214,7 +218,7 @@ class Review extends React.Component {
                         <DescriptionIcon fontSize="small"/>
                       </Grid>
                       <Grid item
-                            sm>
+                            xs>
                         {eatery.description}
                       </Grid>
                     </Grid>
@@ -271,7 +275,7 @@ class Review extends React.Component {
               <Grid container
                     className={classes.titleWrapper}>
                 <Grid item
-                      sm>
+                      xs>
                   <Typography variant="h5"
                               className={classes.title}>
                     리뷰

@@ -1,6 +1,7 @@
 import React from 'react';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
+import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -115,8 +116,11 @@ class NavigationMenu extends React.Component {
     this.setState({ dialogOpen: true });
   }
 
-  handleDialogClose() {
+  handleDialogClose(result) {
     this.setState({ dialogOpen: false });
+    if (result && result._id) {
+      Router.push(`/review/${result._id}`);
+    }
   }
 
   render() {
@@ -128,7 +132,7 @@ class NavigationMenu extends React.Component {
     const handleSearch = onSearch || this.handleSearch;
     const { keyword } = this.state;
     return (
-      <div className={className}>
+      <div>
         <List disablePadding>
           <div className={classes.listItem}>
             <Button fullWidth
