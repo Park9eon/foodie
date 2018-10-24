@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import LocationIcon from '@material-ui/icons/LocationOn';
 import DescriptionIcon from '@material-ui/icons/Description';
+import _ from 'lodash';
 import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
 import { getEatery, getTagList } from '../lib/api/eatery';
@@ -17,6 +18,7 @@ import Rating from '../components/Rating';
 import ReviewList from '../components/ReviewList';
 import EateryDialog from '../components/EateryDialog';
 import ReviewDialog from '../components/ReviewDialog';
+import ImageDialog from '../components/ImageDialog';
 import Tags from '../components/Tags';
 
 const styles = (theme) => ({
@@ -42,6 +44,7 @@ const styles = (theme) => ({
   },
   image: {
     background: 'rgb(200, 200, 200)',
+    border: '1px solid #eee',
     width: '100%',
     height: '100%',
     objectFit: 'cover',
@@ -77,9 +80,11 @@ class Review extends React.Component {
       reviews: [],
       images: [],
     },
+    review: {},
     tags: [],
     eateryDialogOpen: false,
     reviewDialogOpen: false,
+    imageDialogOpen: false,
   };
 
   constructor(props) {
@@ -90,18 +95,7 @@ class Review extends React.Component {
   }
 
   async componentDidMount() {
-    const { id } = this.props;
-    try {
-      const eatery = await getEatery(id);
-      const tags = await getTagList();
-
-      this.setState({
-        eatery,
-        tags,
-      });
-    } catch (err) {
-      Router.push('/');
-    }
+    await this.update();
   }
 
   handleDialogOpen(name) {
@@ -111,19 +105,49 @@ class Review extends React.Component {
   }
 
   handleDialogClose(name) {
-    return () => {
+    return async (result) => {
       this.setState({ [name]: false });
-      console.log(name, this.state);
+      if (result === true) {
+        await this.update();
+      }
     };
   }
 
-  handleReview(result) {
-    console.log(result);
+  handleReview(event) {
+    if (event.review) {
+      this.setState({
+        review: event.review,
+        reviewDialogOpen: true,
+      });
+    } else {
+      this.setState({
+        review: {},
+        reviewDialogOpen: true,
+      });
+    }
+  }
+
+  async update() {
+    const { id } = this.props;
+    try {
+      const eatery = await getEatery(id);
+      const tags = await getTagList();
+      eatery.reviews = eatery.reviews.filter((review) => review.user);
+      eatery.images = _.shuffle(eatery.images.filter((image) => image));
+      this.setState({
+        eatery,
+        tags,
+      });
+    } catch (err) {
+      Router.push('/');
+    }
   }
 
   render() {
     const { user, classes } = this.props;
-    const { eatery, tags, eateryDialogOpen, reviewDialogOpen } = this.state;
+    const {
+      eatery, tags, eateryDialogOpen, reviewDialogOpen, imageDialogOpen, review,
+    } = this.state;
     return (
       <div>
         <Head>
@@ -213,34 +237,37 @@ class Review extends React.Component {
                   <Typography variant="caption">{`사진 ${eatery.images.length}개`}</Typography>
                 </Grid>
               </Grid>
-              <Grid container
-                    spacing={8}
-                    className={classes.section}>
-                <Grid item
-                      xs={8}
-                      className={classes.imageWrapper}>
-                  <img className={classes.image}
-                       src={eatery.images[0] || '/static/img_default.png'}/>
+              <div className={classes.imagesSection}>
+                <Grid container
+                      spacing={8}
+                      className={classes.section}
+                      onClick={this.handleDialogOpen('imageDialogOpen')}>
+                  <Grid item
+                        xs={8}
+                        className={classes.imageWrapper}>
+                    <img className={classes.image}
+                         src={eatery.images[0] || '/static/img_default.png'}/>
+                  </Grid>
+                  <Grid item
+                        xs={4}
+                        className={classes.imageWrapper}>
+                    <img className={classes.image}
+                         src={eatery.images[1] || '/static/img_default.png'}/>
+                  </Grid>
+                  <Grid item
+                        xs={6}
+                        className={classes.imageWrapper}>
+                    <img className={classes.image}
+                         src={eatery.images[2] || '/static/img_default.png'}/>
+                  </Grid>
+                  <Grid item
+                        xs={6}
+                        className={classes.imageWrapper}>
+                    <img className={classes.image}
+                         src={eatery.images[3] || '/static/img_default.png'}/>
+                  </Grid>
                 </Grid>
-                <Grid item
-                      xs={4}
-                      className={classes.imageWrapper}>
-                  <img className={classes.image}
-                       src={eatery.images[1] || '/static/img_default.png'}/>
-                </Grid>
-                <Grid item
-                      xs={6}
-                      className={classes.imageWrapper}>
-                  <img className={classes.image}
-                       src={eatery.images[2] || '/static/img_default.png'}/>
-                </Grid>
-                <Grid item
-                      xs={6}
-                      className={classes.imageWrapper}>
-                  <img className={classes.image}
-                       src={eatery.images[3] || '/static/img_default.png'}/>
-                </Grid>
-              </Grid>
+              </div>
               <Grid container
                     className={classes.titleWrapper}>
                 <Grid item
@@ -252,7 +279,7 @@ class Review extends React.Component {
                 </Grid>
                 <Grid item>
                   <Button color="primary"
-                          onClick={this.handleDialogOpen('reviewDialogOpen')}>
+                          onClick={this.handleReview}>
                     리뷰작성하기
                   </Button>
                 </Grid>
@@ -269,7 +296,12 @@ class Review extends React.Component {
                       open={eateryDialogOpen}
                       {...eatery}/>
         <ReviewDialog onClose={this.handleDialogClose('reviewDialogOpen')}
-                      open={reviewDialogOpen}/>
+                      open={reviewDialogOpen}
+                      eateryId={eatery._id}
+                      {...review}/>
+        <ImageDialog onClose={this.handleDialogClose('imageDialogOpen')}
+                     open={imageDialogOpen}
+                     images={eatery.images}/>
       </div>
     );
   }

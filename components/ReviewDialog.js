@@ -12,7 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Dropzone from 'react-dropzone';
 import Rating from './Rating';
-import { createReview } from '../lib/api/eatery';
+import { createReview, updateReview } from '../lib/api/eatery';
 
 const styles = (theme) => ({
   dropzone: {
@@ -47,21 +47,23 @@ const styles = (theme) => ({
   },
 });
 
-class EateryDialog extends React.Component {
+class ReviewDialog extends React.Component {
   static propTypes = {
     classes: PropTypes.shape().isRequired,
     open: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
+    eateryId: PropTypes.string,
     _id: PropTypes.string,
     review: PropTypes.string,
     rating: PropTypes.number,
-    images: PropTypes.arrayOf(PropTypes.string),
+    images: PropTypes.arrayOf(PropTypes.any),
   };
 
   static defaultProps = {
+    eateryId: null,
     _id: null,
     review: '',
-    rating: null,
+    rating: 3,
     images: [],
   };
 
@@ -74,6 +76,7 @@ class EateryDialog extends React.Component {
   }
 
   state = {
+    _id: null,
     review: '',
     rating: null,
     images: [],
@@ -87,8 +90,9 @@ class EateryDialog extends React.Component {
     this.setStateByProps(nextProps);
   }
 
-  setStateByProps({ review, rating, images }) {
+  setStateByProps({ _id, review, rating, images }) {
     this.setState({
+      _id,
       review,
       rating,
       images,
@@ -119,13 +123,25 @@ class EateryDialog extends React.Component {
     this.setState({ images });
   }
 
-  async save() {
-    const { review, rating, images } = this.props;
-    const data = new FormData();
-    data.append('review', review);
-    data.append('rating', rating);
-    data.append('images', images);
-    await createReview(data);
+  async save(callback) {
+    try {
+      const { eateryId } = this.props;
+      const { _id, review, rating, images } = this.state;
+      const data = new FormData();
+      data.append('review', review);
+      data.append('rating', rating);
+      images.forEach((image) => {
+        data.append('images', image);
+      });
+      if (_id) {
+        await updateReview(eateryId, _id, data);
+      } else {
+        await createReview(eateryId, data);
+      }
+      callback(true);
+    } catch (e) {
+      callback(false);
+    }
   }
 
   render() {
@@ -168,15 +184,14 @@ class EateryDialog extends React.Component {
                     </div>
                   </GridListTile>
                 ))}
-                <GridListTile cols={4}>
-                  <Dropzone accept="image/jpeg, image/png"
-                            className={classes.dropzone}
-                            acceptClassName={classes.dropzoneAccept}
-                            onDrop={this.handleDrop}>
-                    <p>클릭 혹은 이미지를 드래그 해주세요.</p>
-                  </Dropzone>
-                </GridListTile>
               </GridList>
+              <Dropzone accept="image/jpeg, image/png"
+                        className={classes.dropzone}
+                        acceptClassName={classes.dropzoneAccept}
+                        onDrop={this.handleDrop}>
+                <p>사진등록</p>
+                <p>클릭 혹은 이미지를 드래그 해주세요.</p>
+              </Dropzone>
             </div>
           </form>
         </DialogContent>
@@ -197,4 +212,4 @@ class EateryDialog extends React.Component {
   }
 }
 
-export default withStyles(styles)(EateryDialog);
+export default withStyles(styles)(ReviewDialog);

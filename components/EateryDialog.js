@@ -177,6 +177,7 @@ class EateryDialog extends React.Component {
       } else {
         await createEatery(data);
       }
+      callback(true);
     } catch (err) {
       callback(false);
     }

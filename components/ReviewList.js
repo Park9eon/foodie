@@ -48,12 +48,12 @@ class ReviewList extends React.Component {
         {item.user && user._id === item.user._id
         && (
           <Grid item>
-            <IconButton onClick={() => onClick && onClick({ _id: item._id, event: 'edit' })}>
+            <IconButton onClick={() => onClick && onClick({ review: item, event: 'edit' })}>
               <EditIcon fontSize="small"/>
             </IconButton>
-            <IconButton onClick={() => onClick && onClick({ _id: item._id, event: 'delete' })}>
-              <DeleteIcon fontSize="small"/>
-            </IconButton>
+            {/*<IconButton onClick={() => onClick && onClick({ review: item, event: 'delete' })}>*/}
+              {/*<DeleteIcon fontSize="small"/>*/}
+            {/*</IconButton>*/}
           </Grid>
         )}
       </Grid>
@@ -61,7 +61,7 @@ class ReviewList extends React.Component {
     return (
       <Grid container
             spacing={16}>
-        {items.filter((item) => item.review)
+        {items.filter((item) => (item.user))
           .map(listItem)}
       </Grid>
     );

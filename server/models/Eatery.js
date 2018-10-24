@@ -88,6 +88,13 @@ class EateryClass {
           name: 1,
           tags: 1,
           createdAt: 1,
+          images: {
+            $reduce: {
+              input: '$reviews.images',
+              initialValue: [],
+              in: { $concatArrays: ['$$value', '$$this'] },
+            },
+          },
           rating: { $avg: '$reviews.rating' },
         },
       },
@@ -99,7 +106,10 @@ class EateryClass {
       },
       {
         $project: {
-          createdAt: 0,
+          name: 1,
+          tags: 1,
+          rating: 1,
+          images: 1,
         },
       },
     ]);
@@ -137,7 +147,10 @@ class EateryClass {
         },
       },
       {
-        $unwind: '$reviews.user',
+        $unwind: {
+          path: '$reviews.user',
+          preserveNullAndEmptyArrays: true,
+        },
       },
       {
         $group: {
@@ -148,8 +161,8 @@ class EateryClass {
           lat: { $first: '$lat' },
           lng: { $first: '$lng' },
           tags: { $first: '$tags' },
-          rating: { $first: '$rating' },
           reviews: { $push: '$reviews' },
+          images: { $push: '$reviews.images' },
         },
       },
       {
@@ -165,13 +178,20 @@ class EateryClass {
             _id: 1,
             rating: 1,
             review: 1,
+            images: 1,
             user: {
               _id: 1,
               displayName: 1,
               avatarUrl: 1,
             },
           },
-          images: [],
+          images: {
+            $reduce: {
+              input: '$images',
+              initialValue: [],
+              in: { $concatArrays: ['$$value', '$$this'] },
+            },
+          },
         },
       },
     ]);
@@ -196,7 +216,6 @@ class EateryClass {
     });
     return result;
   }
-
 
   static async edit({
                       id,
@@ -260,11 +279,9 @@ class EateryClass {
       'reviews._id': reviewId,
     }, {
       $set: {
-        'reviews.$': {
-          rating,
-          review,
-          images,
-        },
+        'reviews.$.rating': rating,
+        'reviews.$.review': review,
+        'reviews.$.images': images,
       },
     });
     return result;

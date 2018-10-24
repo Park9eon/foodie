@@ -64,7 +64,7 @@ function api(server) {
   router.post('/', authorization(), async ({ body }, res) => {
     try {
       const result = await Eatery.add(body);
-      res.json(201, result);
+      res.status(201).json(result);
     } catch (err) {
       res.json({ error: err.message || err.toString() });
     }
@@ -140,31 +140,37 @@ function api(server) {
   // 음식점 리뷰 추가
   router.post('/:id/review', authorization(), upload.array('images'), async (req, res) => {
     try {
-      const { rating, review } = req.body;
-      const _id = req.params.id;
-      const user = req.user;
-      const photos = req.files.map(file => path.join('static', 'upload', file.filename))
-        .concat(imageUrls || []);
+      const {
+        user, params: { id }, body: { rating, review, images }, files,
+      } = req;
+      const uploadedImages = files.map((file) => path.join('/static', 'upload', file.filename))
+        .concat(images || []);
       const result = await Eatery.addReview({
-        _id,
+        _id: id,
         rating,
         review,
+        images: uploadedImages,
         user,
       });
-      res.json(201, result);
+      res.status(201).json(result);
     } catch (err) {
       res.json({ error: err.message || err.toString() });
     }
   });
-  router.put('/:id/review/:reviewId', authorization(), async (req, res) => {
+  router.put('/:id/review/:reviewId', authorization(), upload.array('images'), async (req, res) => {
     try {
-      const { rating, review } = req.body;
-      const { id, reviewId } = req.params;
-      const result = await Eatery.addReview({
+      const {
+        user, params: { id, reviewId }, body: { rating, review, images }, files,
+      } = req;
+      const uploadedImages = files.map((file) => path.join('/static', 'upload', file.filename))
+        .concat(images || []);
+      const result = await Eatery.editReview({
         _id: id,
         reviewId,
         rating,
         review,
+        images: uploadedImages,
+        user,
       });
       res.json(result);
     } catch (err) {

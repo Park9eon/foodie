@@ -39,6 +39,7 @@ class VerticalList extends React.Component {
       name: PropTypes.string
         .isRequired,
       location: PropTypes.shape(),
+      image: PropTypes.string,
       tags: PropTypes.arrayOf(PropTypes.string),
     })),
   };
@@ -49,10 +50,13 @@ class VerticalList extends React.Component {
   };
 
   render() {
-    const { className, classes, items } = this.props;
+    const {
+      className, classes, items,
+    } = this.props;
     const listItem = (item) => {
       const link = `/review?id=${item._id}`;
       const linkAs = `/review/${item._id}`;
+      const image = item.images[Math.floor(Math.random() * item.images.length)];
       return (
         <Grid container
               item
@@ -66,7 +70,7 @@ class VerticalList extends React.Component {
                   href={link}>
               <a>
                 <img className={classes.image}
-                     src={'/static/img_default.png'}
+                     src={image || '/static/img_default.png'}
                      alt={item.name}/>
               </a>
             </Link>

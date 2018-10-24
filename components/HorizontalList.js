@@ -53,6 +53,7 @@ class HorizontalList extends React.Component {
     const listItem = (item, index) => {
       const link = `/review?id=${item._id}`;
       const linkAs = `/review/${item._id}`;
+      const image = item.images[Math.floor(Math.random() * item.images.length)];
       return (
         <Grid className={classes.listItem}
               item
@@ -63,7 +64,7 @@ class HorizontalList extends React.Component {
                   href={link}>
               <a>
                 <img className={classes.image}
-                     src={'/static/img_default.png'}
+                     src={image || '/static/img_default.png'}
                      alt={item.name}/>
               </a>
             </Link>
