@@ -167,10 +167,10 @@ class EateryDialog extends React.Component {
         data.address = address;
       }
       if (lat) {
-        data.lat = Number.parseInt(lat, 10);
+        data.lat = Number.parseFloat(lat);
       }
       if (lng) {
-        data.lng = Number.parseInt(lng, 10);
+        data.lng = Number.parseFloat(lng);
       }
       if (_id) {
         await updateEatery(_id, data);
@@ -220,22 +220,22 @@ class EateryDialog extends React.Component {
                   spacing={8}>
               <Grid item
                     xs={6}>
-                <TextField label="위도 (선택)"
-                           onKeyPress={this.handleKeyPress}
-                           value={lng}
-                           type="number"
-                           margin="normal"
-                           onChange={this.handleChange('lng')}
-                           fullWidth/>
-              </Grid>
-              <Grid item
-                    xs={6}>
                 <TextField label="경도 (선택)"
                            onKeyPress={this.handleKeyPress}
                            value={lat}
                            type="number"
                            margin="normal"
                            onChange={this.handleChange('lat')}
+                           fullWidth/>
+              </Grid>
+              <Grid item
+                    xs={6}>
+                <TextField label="위도 (선택)"
+                           onKeyPress={this.handleKeyPress}
+                           value={lng}
+                           type="number"
+                           margin="normal"
+                           onChange={this.handleChange('lng')}
                            fullWidth/>
               </Grid>
             </Grid>

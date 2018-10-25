@@ -22,6 +22,7 @@ import ReviewDialog from '../components/ReviewDialog';
 import ImageDialog from '../components/ImageDialog';
 import Alert from '../components/Alert';
 import Tags from '../components/Tags';
+import GoogleMapWrapper from '../components/GoogleMapWrapper';
 
 const styles = (theme) => ({
   root: {
@@ -77,7 +78,7 @@ class Review extends React.Component {
       description: '',
       address: '',
       lat: null,
-      let: null,
+      lng: null,
       rating: 0,
       reviews: [],
       images: [],
@@ -162,7 +163,7 @@ class Review extends React.Component {
   render() {
     const { user, classes } = this.props;
     const {
-      eatery, tags, eateryDialogOpen, reviewDialogOpen, imageDialogOpen, review, alertOpen
+      eatery, tags, eateryDialogOpen, reviewDialogOpen, imageDialogOpen, review, alertOpen,
     } = this.state;
     return (
       <div>
@@ -287,6 +288,15 @@ class Review extends React.Component {
                   </Grid>
                 </Grid>
               </div>
+              {eatery.lat && eatery.lng && (
+                <div className={classes.section}>
+                  <GoogleMapWrapper lng={eatery.lng}
+                                    lat={eatery.lat}
+                                    loadingElement={<div style={{ height: '100%' }}/>}
+                                    containerElement={<div style={{ height: '400px' }}/>}
+                                    mapElement={<div style={{ height: '100%' }}/>}/>
+                </div>
+              )}
               <Grid container
                     className={classes.titleWrapper}>
                 <Grid item
@@ -326,8 +336,7 @@ class Review extends React.Component {
                onClose={this.handleDialogClose('alertOpen')}
                message="리뷰를 삭제하시겠습니까?"
                positiveName="삭제"
-               positiveAction={this.deleteReview}
-        />
+               positiveAction={this.deleteReview}/>
       </div>
     );
   }
