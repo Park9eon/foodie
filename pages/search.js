@@ -111,7 +111,8 @@ class Search extends React.Component {
   handleSearch(k) {
     this.setState({ keyword: k });
     const { query } = this.state;
-    return Router.push({
+    const { router } = this.props;
+    return router.push({
       pathname: '/search',
       query: {
         q: query.join('|'),
