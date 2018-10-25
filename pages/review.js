@@ -12,7 +12,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import _ from 'lodash';
 import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
-import { getEatery, getTagList } from '../lib/api/eatery';
+import { getEatery, getTagList, deleteReview } from '../lib/api/eatery';
 import Header from '../components/Header';
 import NavigationMenu from '../components/NavigationMenu';
 import Rating from '../components/Rating';
@@ -20,6 +20,7 @@ import ReviewList from '../components/ReviewList';
 import EateryDialog from '../components/EateryDialog';
 import ReviewDialog from '../components/ReviewDialog';
 import ImageDialog from '../components/ImageDialog';
+import Alert from '../components/Alert';
 import Tags from '../components/Tags';
 
 const styles = (theme) => ({
@@ -86,13 +87,16 @@ class Review extends React.Component {
     eateryDialogOpen: false,
     reviewDialogOpen: false,
     imageDialogOpen: false,
+    alertOpen: false,
   };
 
   constructor(props) {
     super(props);
     this.handleDialogOpen = this.handleDialogOpen.bind(this);
     this.handleDialogClose = this.handleDialogClose.bind(this);
-    this.handleReview = this.handleReview.bind(this);
+    this.handleEditReview = this.handleEditReview.bind(this);
+    this.handleDeleteReview = this.handleDeleteReview.bind(this);
+    this.deleteReview = this.deleteReview.bind(this);
   }
 
   async componentDidMount() {
@@ -114,18 +118,18 @@ class Review extends React.Component {
     };
   }
 
-  handleReview(event) {
-    if (event.review) {
-      this.setState({
-        review: event.review,
-        reviewDialogOpen: true,
-      });
-    } else {
-      this.setState({
-        review: {},
-        reviewDialogOpen: true,
-      });
-    }
+  handleEditReview(review) {
+    this.setState({
+      review: review._id ? review : {},
+      reviewDialogOpen: true,
+    });
+  }
+
+  handleDeleteReview(review) {
+    this.setState({
+      review,
+      alertOpen: true,
+    });
   }
 
   async update() {
@@ -144,10 +148,21 @@ class Review extends React.Component {
     }
   }
 
+  async deleteReview() {
+    const { eatery, review } = this.state;
+    try {
+      this.setState({ alertOpen: false });
+      await deleteReview(eatery._id, review._id);
+      await this.update();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   render() {
     const { user, classes } = this.props;
     const {
-      eatery, tags, eateryDialogOpen, reviewDialogOpen, imageDialogOpen, review,
+      eatery, tags, eateryDialogOpen, reviewDialogOpen, imageDialogOpen, review, alertOpen
     } = this.state;
     return (
       <div>
@@ -283,14 +298,15 @@ class Review extends React.Component {
                 </Grid>
                 <Grid item>
                   <Button color="primary"
-                          onClick={this.handleReview}>
+                          onClick={this.handleEditReview}>
                     리뷰작성하기
                   </Button>
                 </Grid>
               </Grid>
               <div>
                 <ReviewList user={user}
-                            onClick={this.handleReview}
+                            onEdit={this.handleEditReview}
+                            onDelete={this.handleDeleteReview}
                             items={eatery.reviews}/>
               </div>
             </Grid>
@@ -306,6 +322,12 @@ class Review extends React.Component {
         <ImageDialog onClose={this.handleDialogClose('imageDialogOpen')}
                      open={imageDialogOpen}
                      images={eatery.images}/>
+        <Alert open={alertOpen}
+               onClose={this.handleDialogClose('alertOpen')}
+               message="리뷰를 삭제하시겠습니까?"
+               positiveName="삭제"
+               positiveAction={this.deleteReview}
+        />
       </div>
     );
   }

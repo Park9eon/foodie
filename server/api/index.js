@@ -177,6 +177,18 @@ function api(server) {
       res.json({ error: err.message || err.toString() });
     }
   });
+  router.delete('/:id/review/:reviewId', authorization(), async (req, res) => {
+    try {
+      const { id, reviewId } = req.params;
+      const result = await Eatery.deleteReview({
+        _id: id,
+        reviewId,
+      });
+      res.json(result);
+    } catch (err) {
+      res.json({ error: err.message || err.toString() });
+    }
+  });
   // 음식점 삭제
   router.delete('/:id', authorization({ isAdminOnly: true }), async (req, res) => {
     try {

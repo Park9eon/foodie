@@ -15,15 +15,14 @@ class ReviewList extends React.Component {
       .isRequired,
     user: PropTypes.shape()
       .isRequired,
-    onClick: PropTypes.func,
-  };
-
-  static defaultProps = {
-    onClick: null,
+    onEdit: PropTypes.func
+      .isRequired,
+    onDelete: PropTypes.func
+      .isRequired,
   };
 
   render() {
-    const { user, items, onClick } = this.props;
+    const { user, items, onEdit, onDelete } = this.props;
     const listItem = (item) => (
       <Grid item
             key={item._id}
@@ -48,12 +47,12 @@ class ReviewList extends React.Component {
         {item.user && user._id === item.user._id
         && (
           <Grid item>
-            <IconButton onClick={() => onClick && onClick({ review: item, event: 'edit' })}>
+            <IconButton onClick={() => onEdit && onEdit(item)}>
               <EditIcon fontSize="small"/>
             </IconButton>
-            {/*<IconButton onClick={() => onClick && onClick({ review: item, event: 'delete' })}>*/}
-              {/*<DeleteIcon fontSize="small"/>*/}
-            {/*</IconButton>*/}
+            <IconButton onClick={() => onDelete && onDelete(item)}>
+              <DeleteIcon fontSize="small"/>
+            </IconButton>
           </Grid>
         )}
       </Grid>

@@ -195,13 +195,13 @@ class EateryClass {
   }
 
   static async add({
-                     name,
-                     description,
-                     address,
-                     lat,
-                     lng,
-                     tags,
-                   }) {
+    name,
+    description,
+    address,
+    lat,
+    lng,
+    tags,
+  }) {
     const result = await this.create({
       name,
       description,
@@ -214,14 +214,14 @@ class EateryClass {
   }
 
   static async edit({
-                      id,
-                      name,
-                      description,
-                      address,
-                      lat,
-                      lng,
-                      tags,
-                    }) {
+    id,
+    name,
+    description,
+    address,
+    lat,
+    lng,
+    tags,
+  }) {
     const result = await this.updateOne(
       { _id: id },
       {
@@ -244,12 +244,12 @@ class EateryClass {
   }
 
   static async addReview({
-                           _id,
-                           rating,
-                           review,
-                           images,
-                           user,
-                         }) {
+    _id,
+    rating,
+    review,
+    images,
+    user,
+  }) {
     const result = await this.updateOne({ _id }, {
       $push: {
         reviews: {
@@ -264,12 +264,12 @@ class EateryClass {
   }
 
   static async editReview({
-                            _id,
-                            reviewId,
-                            rating,
-                            review,
-                            images,
-                          }) {
+    _id,
+    reviewId,
+    rating,
+    review,
+    images,
+  }) {
     const result = await this.updateOne({
       _id,
       'reviews._id': reviewId,
@@ -278,6 +278,23 @@ class EateryClass {
         'reviews.$.rating': rating,
         'reviews.$.review': review,
         'reviews.$.images': images,
+      },
+    });
+    return result;
+  }
+
+  static async deleteReview({
+    _id,
+    reviewId,
+  }) {
+    const result = await this.updateOne({
+      _id,
+      'reviews._id': reviewId,
+    }, {
+      $pull: {
+        reviews: {
+          _id: reviewId,
+        },
       },
     });
     return result;
