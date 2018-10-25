@@ -77,7 +77,11 @@ function auth({ ROOT_URL, server }) {
       failureRedirect: '/login',
     }),
     (req, res) => {
-      res.redirect('/');
+      if (req.session.next_url) {
+        res.redirect(req.session.next_url);
+      } else {
+        res.redirect('/');
+      }
     },
   );
 
