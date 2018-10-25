@@ -21,7 +21,7 @@ const styles = (theme) => ({
     width: '100%',
     margin: '0 auto',
     flexGrow: 1,
-    marginTop: '24px',
+    marginTop: '48px',
     padding: theme.spacing.unit * 2,
   },
   navigationWrapper: {
@@ -31,7 +31,6 @@ const styles = (theme) => ({
   titleWrapper: {
     display: 'flex',
     alignItems: 'center',
-    marginTop: '24px',
     marginBottom: '12px',
   },
   title: {

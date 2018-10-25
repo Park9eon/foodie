@@ -5,7 +5,7 @@ import Document, { Head, Main, NextScript } from 'next/document';
 import htmlescape from 'htmlescape';
 import getContext from '../lib/getContext';
 
-const { GA_TRACKING_ID, StripePublishableKey, GOOGLE_MAP_KEY } = process.env;
+const { GA_TRACKING_ID, StripePublishableKey, GOOGLE_MAP_KEY, } = process.env;
 const env = {
   GOOGLE_MAP_KEY,
   GA_TRACKING_ID,
