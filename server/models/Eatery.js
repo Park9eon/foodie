@@ -117,11 +117,7 @@ class EateryClass {
   }
 
   static async tags() {
-    const results = await this.distinct('tags', {
-      tags: {
-        $not: /가성비|회식|점심|저녁|근사한|술/,
-      },
-    });
+    const results = await this.distinct('tags');
     return results;
   }
 
