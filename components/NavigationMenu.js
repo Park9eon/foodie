@@ -119,7 +119,7 @@ class NavigationMenu extends React.Component {
   handleDialogClose(result) {
     this.setState({ dialogOpen: false });
     if (result && result._id) {
-      Router.push(`/review/${result._id}`);
+      Router.push(`/review/?id=${result._id}`, `/review/${result._id}`);
     }
   }
 

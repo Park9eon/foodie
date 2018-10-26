@@ -1,4 +1,5 @@
 import React from 'react';
+import getConfig from 'next/config';
 import Head from 'next/head';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
@@ -12,7 +13,7 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import _ from 'lodash';
 import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
-import { getEatery, getTagList, deleteReview } from '../lib/api/eatery';
+import { deleteReview, getEatery, getTagList } from '../lib/api/eatery';
 import Header from '../components/Header';
 import NavigationMenu from '../components/NavigationMenu';
 import Rating from '../components/Rating';
@@ -22,7 +23,9 @@ import ReviewDialog from '../components/ReviewDialog';
 import ImageDialog from '../components/ImageDialog';
 import Alert from '../components/Alert';
 import Tags from '../components/Tags';
-import GoogleMapWrapper from '../components/GoogleMapWrapper';
+
+const { publicRuntimeConfig } = getConfig();
+const { GOOGLE_MAP_KEY } = publicRuntimeConfig;
 
 const styles = (theme) => ({
   root: {
@@ -51,6 +54,9 @@ const styles = (theme) => ({
     width: '100%',
     height: '100%',
     objectFit: 'cover',
+  },
+  mapImage: {
+    width: '100%',
   },
 });
 
@@ -290,11 +296,8 @@ class Review extends React.Component {
               </div>
               {eatery.lat && eatery.lng && (
                 <div className={classes.section}>
-                  <GoogleMapWrapper lng={eatery.lng}
-                                    lat={eatery.lat}
-                                    loadingElement={<div style={{ height: '100%' }}/>}
-                                    containerElement={<div style={{ height: '400px' }}/>}
-                                    mapElement={<div style={{ height: '100%' }}/>}/>
+                  <img className={classes.mapImage}
+                       src={`https://maps.googleapis.com/maps/api/staticmap?center=${eatery.lat},${eatery.lng}&zoom=15&size=600x300&maptype=roadmap&markers=color:red|${eatery.lat},${eatery.lng}&key=${GOOGLE_MAP_KEY}`}/>
                 </div>
               )}
               <Grid container

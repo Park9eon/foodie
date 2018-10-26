@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import { GoogleMap, Marker, withGoogleMap } from 'react-google-maps';
+import { GoogleMap, withGoogleMap } from 'react-google-maps';
 import MarkerWithLabel from 'react-google-maps/lib/components/addons/MarkerWithLabel';
 
 import { withStyles } from '@material-ui/core/styles';
+import Router from 'next/dist/lib/router';
 import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
 import Header from '../components/Header';
 import { maps } from '../lib/api/eatery';
-import Router from 'next/dist/lib/router';
 
 const styles = () => ({
   mapWrapper: {
@@ -30,7 +30,7 @@ const Map = withGoogleMap(({ items }) => (
     {items && items.map((item) => (
       <MarkerWithLabel key={item._id}
                        labelAnchor={new google.maps.Point(item.name.length * 3, 0)}
-                       onClick={() => Router.push(`/review/${item._id}`)}
+                       onClick={() => Router.push(`/review/?id=${item._id}`, `/review/${item._id}`)}
                        labelStyle={{
                          fontSize: '12px',
                          fontWeight: 700,
