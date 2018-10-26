@@ -29,9 +29,6 @@ const styles = () => ({
   },
   info: {
     fontSize: '18px',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
     color: '#888',
   },
 });
@@ -70,6 +67,7 @@ class VerticalList extends React.Component {
               item
               key={item._id}
               xs={12}
+              wrap="nowrap"
               spacing={8}>
           <Grid item
                 sm={3}
@@ -84,7 +82,8 @@ class VerticalList extends React.Component {
             </Link>
           </Grid>
           <Grid item
-                xs>
+                xs
+                style={{ overflow: 'hidden' }}>
             <Typography variant="h6">
               <Link as={linkAs}
                     href={link}>
