@@ -8,7 +8,7 @@ import Rating from './Rating';
 
 const styles = () => ({
   imageWrapper: {
-    height: '160px',
+    height: '150px',
   },
   image: {
     width: '100%',
@@ -25,6 +25,13 @@ const styles = () => ({
   },
   tags: {
     color: '#444',
+  },
+  info: {
+    fontSize: '18px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    color: '#888',
   },
 });
 
@@ -86,6 +93,11 @@ class VerticalList extends React.Component {
             <Rating value={item.rating}
                     max={5}/>
             <span className={classes.tags}>{item.tags && item.tags.join(', ')}</span>
+            {item.description && (
+              <p className={classes.info}>
+                {item.description}
+              </p>
+            )}
           </Grid>
         </Grid>
       );

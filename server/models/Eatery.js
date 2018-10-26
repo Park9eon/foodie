@@ -88,6 +88,8 @@ class EateryClass {
           name: 1,
           tags: 1,
           createdAt: 1,
+          address: 1,
+          description: 1,
           images: {
             $reduce: {
               input: '$reviews.images',
@@ -110,6 +112,8 @@ class EateryClass {
           tags: 1,
           rating: 1,
           images: 1,
+          address: 1,
+          description: 1,
         },
       },
     ]);
