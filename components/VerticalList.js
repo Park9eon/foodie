@@ -91,7 +91,8 @@ class VerticalList extends React.Component {
               </Link>
             </Typography>
             <Rating value={item.rating}
-                    max={5}/>
+                    max={5}
+                    size={item.reviews}/>
             <span className={classes.tags}>{item.tags && item.tags.join(', ')}</span>
             {item.description && (
               <p className={classes.info}>

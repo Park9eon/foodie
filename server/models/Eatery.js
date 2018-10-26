@@ -52,6 +52,7 @@ class EateryClass {
     const recommendIndex = query.indexOf('추천');
     if (recommendIndex > -1) {
       sort.rating = -1;
+      sort.reviews = -1;
       query.splice(recommendIndex, 1);
     }
     if (!(sort.createdAt && sort.rating)) {
@@ -98,6 +99,7 @@ class EateryClass {
             },
           },
           rating: { $avg: '$reviews.rating' },
+          reviews: { $size: '$reviews' },
         },
       },
       {
@@ -114,6 +116,7 @@ class EateryClass {
           images: 1,
           address: 1,
           description: 1,
+          reviews: 1,
         },
       },
     ]);

@@ -4,7 +4,13 @@ import PropTypes from 'prop-types';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 
-const styles = () => ({});
+const styles = () => ({
+  size: {
+    fontSize: '14px',
+    color: '#8a8a8a',
+    margin: '4px',
+  },
+});
 
 class Rating extends React.Component {
   static propTypes = {
@@ -13,6 +19,7 @@ class Rating extends React.Component {
     value: PropTypes.number,
     max: PropTypes.number
       .isRequired,
+    size: PropTypes.number,
     onChange: PropTypes.func,
     fontSize: PropTypes.string,
   };
@@ -20,12 +27,13 @@ class Rating extends React.Component {
   static defaultProps = {
     value: null,
     onChange: null,
+    size: null,
     fontSize: 'default',
   };
 
   render() {
     const {
-      classes, value, max, onChange, fontSize,
+      classes, value, max, onChange, fontSize, size,
     } = this.props;
     const rating = Array.from(Array(max), (_, index) => (index < value ? 1 : 0));
     return (
@@ -43,6 +51,7 @@ class Rating extends React.Component {
                             onClick={onChange && (() => onChange(key + 1))}
                             key={key}/>
           )))}
+        {!!size && (<span className={classes.size}>평가 {size}개</span>)}
       </div>
     );
   }
