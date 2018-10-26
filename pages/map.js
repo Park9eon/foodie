@@ -9,6 +9,7 @@ import withAuth from '../lib/withAuth';
 import withLayout from '../lib/withLayout';
 import Header from '../components/Header';
 import { maps } from '../lib/api/eatery';
+import Router from 'next/dist/lib/router';
 
 const styles = () => ({
   mapWrapper: {
@@ -29,6 +30,7 @@ const Map = withGoogleMap(({ items }) => (
     {items && items.map((item) => (
       <MarkerWithLabel key={item._id}
                        labelAnchor={new google.maps.Point(item.name.length * 3, 0)}
+                       onClick={() => Router.push(`/review/${item._id}`)}
                        labelStyle={{
                          fontSize: '12px',
                          fontWeight: 700,
