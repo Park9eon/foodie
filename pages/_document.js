@@ -5,7 +5,7 @@ import Document, { Head, Main, NextScript } from 'next/document';
 import htmlescape from 'htmlescape';
 import getContext from '../lib/getContext';
 
-const { GA_TRACKING_ID, StripePublishableKey, GOOGLE_MAP_KEY, } = process.env;
+const { GA_TRACKING_ID, StripePublishableKey, GOOGLE_MAP_KEY } = process.env;
 const env = {
   GOOGLE_MAP_KEY,
   GA_TRACKING_ID,
@@ -20,11 +20,10 @@ class MyDocument extends Document {
       <html lang="ko">
       <Head>
         <meta charSet="utf-8"/>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0"
-        />
-        <meta name="theme-color" content="#aa2e25">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0"/>
+        <meta name="theme-color"
+              content="#aa2e25"/>
         <style>
           {`
               a, a:focus {
@@ -57,16 +56,12 @@ class MyDocument extends Document {
               }
             `}
         </style>
-        <script
-          async
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
-        />
-        <script
-          async
-          src={`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAP_KEY}`}/>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
+        <script async
+                src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}/>
+        <script async
+                src={`https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAP_KEY}`}/>
+        <script dangerouslySetInnerHTML={{
+          __html: `
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){
                   dataLayer.push(arguments);
@@ -74,8 +69,7 @@ class MyDocument extends Document {
                 gtag('js', new Date());
                 gtag('config', '${GA_TRACKING_ID}');
               `,
-          }}
-        />
+        }}/>
       </Head>
       <body>
       <Main/>
@@ -89,12 +83,10 @@ class MyDocument extends Document {
 
 MyDocument.getInitialProps = (ctx) => {
   const pageContext = getContext();
-  const page = ctx.renderPage(Component => props => (
-    <JssProvider
-      registry={pageContext.sheetsRegistry}
-      generateClassName={pageContext.generateClassName}
-    >
-      <Component pageContext={pageContext} {...props} />
+  const page = ctx.renderPage((Component) => (props) => (
+    <JssProvider registry={pageContext.sheetsRegistry}
+                 generateClassName={pageContext.generateClassName}>
+      <Component pageContext={pageContext} {...props}/>
     </JssProvider>
   ));
 
@@ -102,10 +94,8 @@ MyDocument.getInitialProps = (ctx) => {
     ...page,
     pageContext,
     styles: (
-      <style
-        id="jss-server-side"
-        dangerouslySetInnerHTML={{ __html: pageContext.sheetsRegistry.toString() }}
-      />
+      <style id="jss-server-side"
+             dangerouslySetInnerHTML={{ __html: pageContext.sheetsRegistry.toString() }}/>
     ),
   };
 };
