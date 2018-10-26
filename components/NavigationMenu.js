@@ -160,7 +160,8 @@ class NavigationMenu extends React.Component {
             <div className={classes.mapWrapper}>
               <Button className={classes.mapButton}
                       variant="contained"
-                      color="primary">
+                      color="primary"
+                      onClick={() => Router.push('/map')}>
                 지도에서 보기
               </Button>
             </div>

@@ -156,11 +156,11 @@ class Header extends React.Component {
               }}
               open={isMobileMenuOpen}
               onClose={this.handleMobileMenuClose}>
-          <MenuItem>
+          <MenuItem onClick={() => Router.push('/')}>
             <ListIcon className={classes.leftIcon}/>
             <p>목록</p>
           </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={() => Router.push('/map')}>
             <MapIcon className={classes.leftIcon}/>
             <p>지도</p>
           </MenuItem>

@@ -69,6 +69,14 @@ function api(server) {
       res.json({ error: err.message || err.toString() });
     }
   });
+  router.get('/map', async (req, res) => {
+    try {
+      const result = await Eatery.getMaps();
+      res.status(201).json(result);
+    } catch (err) {
+      res.json({ error: err.message || err.toString() });
+    }
+  });
   // 태그목록
   router.get('/tags', async (req, res) => {
     try {
