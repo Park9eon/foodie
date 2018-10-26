@@ -296,8 +296,11 @@ class Review extends React.Component {
               </div>
               {eatery.lat && eatery.lng && (
                 <div className={classes.section}>
-                  <img className={classes.mapImage}
-                       src={`https://maps.googleapis.com/maps/api/staticmap?center=${eatery.lat},${eatery.lng}&zoom=15&size=600x300&maptype=roadmap&markers=color:red|${eatery.lat},${eatery.lng}&key=${GOOGLE_MAP_KEY}`}/>
+                  <a target="_blank"
+                     href={`https://www.google.com/maps/search/?api=1&query=${eatery.lat},${eatery.lng}`}>
+                    <img className={classes.mapImage}
+                         src={`https://maps.googleapis.com/maps/api/staticmap?center=${eatery.lat},${eatery.lng}&zoom=15&size=600x300&maptype=roadmap&markers=color:red|${eatery.lat},${eatery.lng}&key=${GOOGLE_MAP_KEY}`}/>
+                  </a>
                 </div>
               )}
               <Grid container
