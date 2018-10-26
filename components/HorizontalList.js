@@ -9,7 +9,7 @@ import Rating from './Rating';
 const styles = () => ({
   imageWrapper: {
     width: '100%',
-    height: '160px',
+    height: '150px',
   },
   image: {
     width: '100%',

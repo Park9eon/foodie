@@ -71,6 +71,21 @@ function auth({ ROOT_URL, server }) {
     passport.authenticate('google', options)(req, res, next);
   });
 
+  server.get('/admin/login', (req, res, next) => {
+    const options = {
+      scope: ['profile', 'email'],
+      prompt: 'select_account',
+    };
+
+    if (req.query && req.query.next && req.query.next.startsWith('/')) {
+      req.session.next_url = req.query.next;
+    } else {
+      req.session.next_url = null;
+    }
+
+    passport.authenticate('google', options)(req, res, next);
+  });
+
   server.get(
     '/oauth2callback',
     passport.authenticate('google', {

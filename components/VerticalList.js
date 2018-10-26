@@ -8,6 +8,7 @@ import Rating from './Rating';
 
 const styles = () => ({
   imageWrapper: {
+    width: '150px',
     height: '150px',
   },
   image: {
@@ -71,7 +72,7 @@ class VerticalList extends React.Component {
               xs={12}
               spacing={8}>
           <Grid item
-                xs={3}
+                sm={3}
                 className={classes.imageWrapper}>
             <Link as={linkAs}
                   href={link}>
@@ -83,7 +84,7 @@ class VerticalList extends React.Component {
             </Link>
           </Grid>
           <Grid item
-                xs={9}>
+                xs>
             <Typography variant="h6">
               <Link as={linkAs}
                     href={link}>
