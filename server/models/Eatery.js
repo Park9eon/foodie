@@ -125,8 +125,8 @@ class EateryClass {
 
   static async getMaps() {
     const results = await this.find({
-      lat: { $exists: true, },
-      lng: { $exists: true, },
+      lat: { $exists: true },
+      lng: { $exists: true },
     });
     return results;
   }
@@ -137,7 +137,7 @@ class EateryClass {
   }
 
   static async getOne(id) {
-    const result = await this.aggregate([
+    const result = this.aggregate([
       {
         $match: {
           _id: mongoose.Types.ObjectId(id),
@@ -210,13 +210,13 @@ class EateryClass {
   }
 
   static async add({
-                     name,
-                     description,
-                     address,
-                     lat,
-                     lng,
-                     tags,
-                   }) {
+    name,
+    description,
+    address,
+    lat,
+    lng,
+    tags,
+  }) {
     const result = await this.create({
       name,
       description,
@@ -229,14 +229,14 @@ class EateryClass {
   }
 
   static async edit({
-                      id,
-                      name,
-                      description,
-                      address,
-                      lat,
-                      lng,
-                      tags,
-                    }) {
+    id,
+    name,
+    description,
+    address,
+    lat,
+    lng,
+    tags,
+  }) {
     const result = await this.updateOne(
       { _id: id },
       {
@@ -259,12 +259,12 @@ class EateryClass {
   }
 
   static async addReview({
-                           _id,
-                           rating,
-                           review,
-                           images,
-                           user,
-                         }) {
+    _id,
+    rating,
+    review,
+    images,
+    user,
+  }) {
     const result = await this.updateOne({ _id }, {
       $push: {
         reviews: {
@@ -279,12 +279,12 @@ class EateryClass {
   }
 
   static async editReview({
-                            _id,
-                            reviewId,
-                            rating,
-                            review,
-                            images,
-                          }) {
+    _id,
+    reviewId,
+    rating,
+    review,
+    images,
+  }) {
     const result = await this.updateOne({
       _id,
       'reviews._id': reviewId,
@@ -299,9 +299,9 @@ class EateryClass {
   }
 
   static async deleteReview({
-                              _id,
-                              reviewId,
-                            }) {
+    _id,
+    reviewId,
+  }) {
     const result = await this.updateOne({
       _id,
       'reviews._id': reviewId,
@@ -312,6 +312,13 @@ class EateryClass {
         },
       },
     });
+    return result;
+  }
+
+  static async random(size = 1) {
+    const result = await this.aggregate.sample(size)
+      .project('-reviews')
+      .exec();
     return result;
   }
 }

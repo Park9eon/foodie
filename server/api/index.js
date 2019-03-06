@@ -200,13 +200,21 @@ function api(server) {
   // 음식점 삭제
   router.delete('/:id', authorization({ isAdminOnly: true }), async (req, res) => {
     try {
-      const result = Eatery.del(req.params.id);
+      const result = await Eatery.del(req.params.id);
       res.json(result);
     } catch (err) {
       res.json({ error: err.message || err.toString() });
     }
   });
 
+  router.get('/random', async (req, res) => {
+    try {
+      const result = await Eatery.random();
+      res.json(result);
+    } catch (e) {
+      res.json({ error: e.message || e.toString() });
+    }
+  });
   server.use('/api/eatery', router);
 }
 
