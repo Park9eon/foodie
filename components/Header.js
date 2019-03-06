@@ -97,7 +97,7 @@ class Header extends React.Component {
               }}>
                 <Typography variant="h6"
                             color="inherit">
-                  MediexFoodie
+                  Foodie
                 </Typography>
               </a>
             </Link>

@@ -174,7 +174,7 @@ class Review extends React.Component {
     return (
       <div>
         <Head>
-          <title>{`Mediex Foodie - ${eatery.name}`}</title>
+          <title>{`Osquare Foodie - ${eatery.name}`}</title>
         </Head>
         <Header user={user}/>
         <main className={classes.root}>

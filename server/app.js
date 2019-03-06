@@ -3,7 +3,6 @@ const session = require('express-session');
 const compression = require('compression');
 const mongoSessionStore = require('connect-mongo');
 const next = require('next');
-const path = require('path');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
 const auth = require('./google');
@@ -18,7 +17,7 @@ const dev = process.env.NODE_ENV !== 'production';
 const port = process.env.PORT || 8000;
 const ROOT_URL = dev ? `http://localhost:${port}` : `${process.env.PROD_URL}`;
 
-const MONGO_URL = dev ? process.env.MONGO_URL_TEST : process.env.MONGO_URL;
+const MONGO_URL = process.env.MONGO_URL;
 
 mongoose.connect(MONGO_URL, { useNewUrlParser: true });
 

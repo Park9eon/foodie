@@ -129,7 +129,7 @@ class Search extends React.Component {
     return (
       <div>
         <Head>
-          <title>Mediex Foodie - 찾아보기</title>
+          <title>Osqaure Foodie - 찾아보기</title>
         </Head>
         <Header user={user}/>
         <main className={classes.root}>

@@ -72,7 +72,7 @@ class MapWithLayout extends React.Component {
     return (
       <div>
         <Head>
-          <title>Mediex Foodie - Map</title>
+          <title>Osqaure Foodie - Map</title>
         </Head>
         <Header user={user}/>
         <div>

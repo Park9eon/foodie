@@ -59,7 +59,7 @@ function auth({ ROOT_URL, server }) {
     const options = {
       scope: ['profile', 'email'],
       prompt: 'select_account',
-      hostedDomain: 'mediex.co.kr',
+      hostedDomain: 'osquarecorp.com',
     };
 
     if (req.query && req.query.next && req.query.next.startsWith('/')) {

@@ -88,7 +88,7 @@ class Index extends React.Component {
     return (
       <div>
         <Head>
-          <title>Mediex Foodie</title>
+          <title>Osquare Foodie</title>
         </Head>
         <Header user={user}/>
         <main className={classes.root}>
