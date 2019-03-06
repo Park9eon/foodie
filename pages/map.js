@@ -24,8 +24,8 @@ const styles = () => ({
 const Map = withGoogleMap(({ items }) => (
   <GoogleMap defaultZoom={14}
              defaultCenter={{
-               lat: 37.499615,
-               lng: 127.005799,
+               lat: 37.496623,
+               lng: 127.038214,
              }}>
     {items && items.map((item) => (
       <MarkerWithLabel key={item._id}
