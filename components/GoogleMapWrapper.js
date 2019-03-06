@@ -9,8 +9,8 @@ class GoogleMapWrapper extends React.Component {
   };
 
   static defaultProps = {
-    lat: 37.499615,
-    lng: 127.005799,
+    lat: 37.496623,
+    lng: 127.038214,
   };
 
   render() {
