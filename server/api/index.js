@@ -108,6 +108,30 @@ function api(server) {
       image: '/static/tag_6.jpg',
     }]);
   });
+  router.post('/random', async (req, res) => {
+    try {
+      const result = await Eatery.random(req.query.size);
+      const NULL = '업데이트 해주세요~';
+      res.json({
+        response_type: 'in_channel',
+        text: '음식점을 추천해드립니다.',
+        attachments: result.map((eatery) => ({
+          title: eatery.name,
+          // language=Markdown
+          text: `description: ${eatery.description || NULL}
+address: ${eatery.address}
+tags: \`${eatery.tags && eatery.tags.join(', ') || NULL}\`
+link: https://foodie.osquare9.com/review/${eatery._id}`,
+          mrkdwn_in: ['text', 'pretext'],
+        })),
+      });
+    } catch (e) {
+      res.json({
+        response_type: 'ephemeral',
+        text: e.message || e.toString(),
+      });
+    }
+  });
   // 음식점
   router.get('/:id', async (req, res) => {
     try {
@@ -204,15 +228,6 @@ function api(server) {
       res.json(result);
     } catch (err) {
       res.json({ error: err.message || err.toString() });
-    }
-  });
-
-  router.get('/random', async (req, res) => {
-    try {
-      const result = await Eatery.random();
-      res.json(result);
-    } catch (e) {
-      res.json({ error: e.message || e.toString() });
     }
   });
   server.use('/api/eatery', router);
