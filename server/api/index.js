@@ -119,7 +119,7 @@ function api(server) {
           title: eatery.name,
           // language=Markdown
           text: `description: ${eatery.description || NULL}
-address: ${eatery.address}
+address: ${eatery.address || NULL}
 tags: \`${eatery.tags && eatery.tags.join(', ') || NULL}\`
 link: https://foodie.osquare9.com/review/${eatery._id}`,
           mrkdwn_in: ['text', 'pretext'],
