@@ -137,7 +137,7 @@ class EateryClass {
   }
 
   static async getOne(id) {
-    const result = this.aggregate([
+    const result = await this.aggregate([
       {
         $match: {
           _id: mongoose.Types.ObjectId(id),
