@@ -316,7 +316,7 @@ class EateryClass {
   }
 
   static async random(size = 1) {
-    const result = await this.aggregate.sample(size)
+    const result = await this.aggregate().sample(size)
       .project('-reviews')
       .exec();
     return result;
