@@ -114,10 +114,10 @@ function api(server) {
       const NULL = '업데이트 해주세요~';
       res.json({
         response_type: 'in_channel',
-        pretext: 'https://foodie.osquare9.com 에서 모든 음식점 확인과 등록을 할 수 있습니다.',
         text: '음식점을 추천해드립니다.',
         attachments: result.map((eatery) => ({
           title: eatery.name,
+          pretext: 'https://foodie.osquare9.com 에서 모든 음식점 확인과 등록을 할 수 있습니다.',
           // language=Markdown
           text: `description: ${eatery.description || NULL}
 address: ${eatery.address || NULL}
